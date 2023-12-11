@@ -1,7 +1,7 @@
 # spaceMarker
 
 <!-- badges: start -->
-
+[![DOI](https://zenodo.org/badge/724929670.svg)](https://zenodo.org/doi/10.5281/zenodo.10360070)
 <!-- badges: end -->
 
 
