@@ -130,8 +130,8 @@ compute_permutation<- function(cluster_info, perm.size = 1000,
     colnames(cluster_mt) <- cluster_names
     # a matrix of cluster vector, each column as a vector for a cluster
     for (i_cluster in cluster_names){
-      x_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "x_centroid"]
-      y_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "y_centroid"]
+      x_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "x"]
+      y_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "y"]
       cluster_ppp <- spatstat.geom::ppp(x_loc,y_loc,w_x, w_y)
       if (bin_type == "hexagon"){
         cm_cluster <- spatstat.geom::quadratcount(cluster_ppp, tess=H)
@@ -221,37 +221,37 @@ compute_permutation<- function(cluster_info, perm.size = 1000,
 #'
 #' set.seed(100)
 #' # simulate coordiantes for clusters
-#' df_clA = data.frame(x_centroid = rnorm(n=100, mean=20, sd=5),
-#'                    y_centroid = rnorm(n=100, mean=20, sd=5), cluster="A")
-#' df_clB = data.frame(x_centroid = rnorm(n=100, mean=100, sd=5),
-#'                   y_centroid = rnorm(n=100, mean=100, sd=5), cluster="B")
+#' df_clA = data.frame(x = rnorm(n=100, mean=20, sd=5),
+#'                    y = rnorm(n=100, mean=20, sd=5), cluster="A")
+#' df_clB = data.frame(x = rnorm(n=100, mean=100, sd=5),
+#'                   y = rnorm(n=100, mean=100, sd=5), cluster="B")
 
 #' clusters = rbind(df_clA, df_clB)
-#' clusters$rep="rep1"
+#' clusters$sample="rep1"
 #' # simulate coordiantes for genes
-#' trans_info = data.frame(rbind(cbind(x_location = rnorm(n=100, mean=20, sd=5),
-#'                                     y_location = rnorm(n=100, mean=20, sd=5),
+#' trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20, sd=5),
+#'                                     y = rnorm(n=100, mean=20, sd=5),
 #'                                  feature_name="gene_A1"),
-#'                            cbind(x_location = rnorm(n=100, mean=20, sd=5),
-#'                                  y_location = rnorm(n=100, mean=20, sd=5),
+#'                            cbind(x = rnorm(n=100, mean=20, sd=5),
+#'                                  y = rnorm(n=100, mean=20, sd=5),
 #'                                  feature_name="gene_A2"),
-#'                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
-#'                                  y_location = rnorm(n=100, mean=100, sd=5),
+#'                            cbind(x = rnorm(n=100, mean=100, sd=5),
+#'                                  y = rnorm(n=100, mean=100, sd=5),
 #'                                  feature_name="gene_B1"),
-#'                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
-#'                                  y_location = rnorm(n=100, mean=100, sd=5),
+#'                            cbind(x = rnorm(n=100, mean=100, sd=5),
+#'                                  y = rnorm(n=100, mean=100, sd=5),
 #'                                  feature_name="gene_B2")))
-#' trans_info$x_location=as.numeric(trans_info$x_location)
-#' trans_info$y_location=as.numeric(trans_info$y_location)
+#' trans_info$x=as.numeric(trans_info$x)
+#' trans_info$y=as.numeric(trans_info$y)
 
-#' w_x =  c(min(floor(min(trans_info$x_location)),
-#'             floor(min(clusters$x_centroid))),
-#'         max(ceiling(max(trans_info$x_location)),
-#'             ceiling(max(clusters$x_centroid))))
-#' w_y =  c(min(floor(min(trans_info$y_location)),
-#'          floor(min(clusters$y_centroid))),
-#'       max(ceiling(max(trans_info$y_location)),
-#'           ceiling(max(clusters$y_centroid))))
+#' w_x =  c(min(floor(min(trans_info$x)),
+#'             floor(min(clusters$x))),
+#'         max(ceiling(max(trans_info$x)),
+#'             ceiling(max(clusters$x))))
+#' w_y =  c(min(floor(min(trans_info$y)),
+#'          floor(min(clusters$y))),
+#'       max(ceiling(max(trans_info$y)),
+#'           ceiling(max(clusters$y))))
 
 #' rep1 = list(trans_info = trans_info)
 #' perm_res_lst = compute_permp(data=rep1,

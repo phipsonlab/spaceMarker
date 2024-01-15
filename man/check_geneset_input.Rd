@@ -26,9 +26,9 @@ limits of enclosing box.}
 limits of enclosing box.}
 
 \item{cluster_info}{A dataframe/matrix containing the centroid coordinates,
-cluster label and replicate for each cell.The column names must include
-"x_centroid" (x coordinate), "y_centroid" (y coordinate),
-"cluster" (cluster label) and "rep" (replicate).}
+cluster sample label for each cell.The column names must include
+"x" (x coordinate), "y" (y coordinate),
+"cluster" (cluster label) and "sample" (sample).}
 }
 \value{
 A list of two elements

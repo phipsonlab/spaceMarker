@@ -8,8 +8,8 @@
 A list of named matrices generated from get_data():
 \describe{
     \item{cm}{the count matrix}
-    \item{trans_info}{a data frame containing the coordiantes 
-    for every transcript}
+    \item{trans_info}{a data frame containing the coordiantes for 
+                     every transcript}
 }
 }
 \source{

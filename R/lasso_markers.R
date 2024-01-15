@@ -10,7 +10,7 @@
 #' refers to a cluster. The column names must be specified and refer to the
 #' clusters. Please do not assign integers as column names.
 #' This can be the output from the function \code{\link{get_vectors}}.
-#' @param sample_names  A vector specifying the names for the replicates.
+#' @param sample_names  A vector specifying the names for the samples.
 #' @param n_fold Optional. A positive number giving the number of folds used
 #' for cross validation. This parameter will pass to \code{\link{cv.glmnet}}
 #' to calculate a penalty term for every gene.
@@ -77,7 +77,7 @@ check_valid_input<- function(gene_mt,cluster_mt,sample_names, n_fold=10,
     }else{
         # check samples names are the same in cluster_mt for multiple samples
         if (length(setdiff(sample_names,colnames(cluster_mt))) != 0){
-            stop("Inconsistent sample_names and replicate names
+            stop("Inconsistent sample_names and sample names
                     from cluster_mt")
         }
         n_clusters <- ncol(cluster_mt) - length(sample_names)
@@ -103,7 +103,7 @@ check_valid_input<- function(gene_mt,cluster_mt,sample_names, n_fold=10,
 #' for cross validation. This parameter will pass to \code{\link{cv.glmnet}}
 #' to calculate a penalty term for every gene.
 #' @param n_samples A positive number giving the number samples
-#' @param sample_names  A vector specifying the names for the replicates.
+#' @param sample_names  A vector specifying the names for the sample
 #'
 #' @return a list of two matrices with the following components
 #' \item{\code{coef_df} }{ A matrix giving the lasso coefficient of
@@ -171,8 +171,8 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #' @details
 #' This function will take the converted gene and cluster vectors from function
 #' \code{\link{get_vectors}}, and return the most relevant cluster label for
-#' each gene. If there are multiple replicates in the dataset, this function
-#' will find shared markers across different replicates by including additional
+#' each gene. If there are multiple samples in the dataset, this function
+#' will find shared markers across different samples by including additional
 #' sample vectors in the input \code{cluster_mt}.
 #'
 #' This function treats all input cluster vectors as features, and create
@@ -212,7 +212,7 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #' to a cluster. The column names must be specified and refer to the clusters.
 #' Please do not assign integers as column names.
 #' This can be the output from the function \code{\link{get_vectors}}.
-#' @param sample_names  A vector specifying the names for the replicates.
+#' @param sample_names  A vector specifying the names for the samples.
 #' @param keep_positive A logical flag indicating whether to return positively
 #' correlated clusters or not.
 #' @param coef_cutoff A positive number giving the coefficient cutoff value.
@@ -282,7 +282,7 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #'                 y_centroid = rnorm(n=100, mean=100, sd=5), cluster="B")
 #'
 #' clusters = rbind(df_clA, df_clB)
-#' clusters$rep="rep1"
+#' clusters$sample="rep1"
 #'
 #' # simulate coordiantes for genes
 #' trans_info = data.frame(rbind(cbind(x_location = rnorm(n=100, mean=20,sd=5),

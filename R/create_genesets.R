@@ -14,9 +14,9 @@
 #' @param w_y A numeric vector of length two specifying the y coordinate
 #' limits of enclosing box.
 #' @param cluster_info A dataframe/matrix containing the centroid coordinates,
-#' cluster label and replicate for each cell.The column names must include
-#' "x_centroid" (x coordinate), "y_centroid" (y coordinate),
-#' "cluster" (cluster label) and "rep" (replicate).
+#' cluster sample label for each cell.The column names must include
+#' "x" (x coordinate), "y" (y coordinate),
+#' "cluster" (cluster label) and "sample" (sample).
 #' @return A list of two elements
 
 check_geneset_input <- function(data_lst, bin_type, bin_param, 
@@ -54,21 +54,21 @@ check_geneset_input <- function(data_lst, bin_type, bin_param,
     use_cm <- FALSE
     for (rpp in data_lst){
         if (typeof(rpp) == "list"){
-            req_cols <- c('x_location', 'y_location', 'feature_name' )
+            req_cols <- c('x', 'y', 'feature_name' )
             if (length(setdiff(req_cols, colnames(rpp$trans_info))) > 0){
                 stop("Invalid column names detected in input data_lst. 
-                Must contain columns 'x_location', 'y_location', 
+                Must contain columns 'x', 'y', 
                 'feature_name' for every transcript")}
         }else if (is.matrix(rpp) ==TRUE | is.data.frame(rpp)==TRUE){
             if (is.null(cluster_info)==TRUE){
                 stop("Missing cluster information to build gene vector matrix")
             }
             # must contain cell id
-            req_cols <- c("x_centroid","y_centroid","cluster","rep","cell_id")
+            req_cols <- c("x","y","cluster","sample","cell_id")
             if (length(setdiff(req_cols, colnames(cluster_info))) !=0){
                 stop("Invalid columns in input clusters. Input cluster_info 
-            must contain columns 'x_centroid', 'y_centroid', 'cluster', 
-            'rep','cell_id' for every cell")
+            must contain columns 'x', 'y', 'cluster', 
+            'sample','cell_id' for every cell")
             }
             use_cm <- TRUE
         }
@@ -95,9 +95,9 @@ check_geneset_input <- function(data_lst, bin_type, bin_param,
 #' @param w_y A numeric vector of length two specifying the y coordinate
 #' limits of enclosing box.
 #' @param cluster_info A dataframe/matrix containing the centroid coordinates,
-#' cluster label and replicate for each cell.The column names must include
-#' "x_centroid" (x coordinate), "y_centroid" (y coordinate),
-#' "cluster" (cluster label) and "rep" (replicate).
+#' cluster and sample label for each cell.The column names must include
+#' "x" (x coordinate), "y" (y coordinate),
+#' "cluster" (cluster label) and "sample" (sample).
 #'
 #' @importFrom stats setNames
 #' @importFrom magrittr "%>%"
@@ -108,17 +108,17 @@ check_geneset_input <- function(data_lst, bin_type, bin_param,
 #'
 #' @examples
 #' set.seed(15)
-#' trans = as.data.frame(rbind(cbind(x_location = runif(10, min=1, max=10),
-#'                                 y_location = runif(10, min=1, max=10),
+#' trans = as.data.frame(rbind(cbind(x = runif(10, min=1, max=10),
+#'                                 y = runif(10, min=1, max=10),
 #'                                 feature_name="A"),
-#'                          cbind(x_location = runif(5, min=10, max=24),
-#'                                y_location = runif(5, min=1, max=10),
+#'                          cbind(x = runif(5, min=10, max=24),
+#'                                y = runif(5, min=1, max=10),
 #'                                feature_name="B"),
-#'                          cbind(x_location = runif(10, min=10, max=24),
-#'                                y_location = runif(10, min=10, max=24),
+#'                          cbind(x = runif(10, min=10, max=24),
+#'                                y = runif(10, min=10, max=24),
 #'                                feature_name="C")))
-#' trans$x_location = as.numeric(trans$x_location)
-#' trans$y_location = as.numeric(trans$y_location)
+#' trans$x = as.numeric(trans$x)
+#' trans$y = as.numeric(trans$y)
 #' data=list(trans_info=trans)
 #' geneset_res = create_genesets(data_lst=list("rep1"= data),
 #'                            name_lst=list(dummy_A=c("A","C"),
@@ -162,8 +162,8 @@ create_genesets<-function(data_lst, name_lst, bin_type="square",
             }else{
                 curr <- rpp$trans_info[rpp$trans_info$feature_name %in% 
                                 name_lst[[nm]],
-                                c("x_location", "y_location")] %>% distinct()
-                gene_ppp <- ppp(curr$x_location,curr$y_location,w_x, w_y)
+                                c("x", "y")] %>% distinct()
+                gene_ppp <- ppp(curr$x,curr$y,w_x, w_y)
 
                 if (bin_type == "hexagon"){
                     vec_g <- as.vector(t(quadratcount(gene_ppp, tess=H)))

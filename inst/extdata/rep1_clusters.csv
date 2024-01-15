@@ -1,4 +1,4 @@
-"","anno","cluster","x_centroid","y_centroid","cells","rep"
+"","anno","cluster","x","y","cells","sample"
 "163","Myoepithelial","c5",486.678955078125,856.34548034668,"163","rep1"
 "166","Endothelial","c8",461.338641357422,843.519839477539,"166","rep1"
 "169","Stromal","c3",467.386383056641,857.839880371094,"169","rep1"

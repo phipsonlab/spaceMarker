@@ -16,12 +16,12 @@ get_gene_vectors_cm(
 }
 \arguments{
 \item{cluster_info}{A dataframe/matrix containing the centroid coordinates,
-cluster label and replicate for each cell.The column names must include
-"x_centroid" (x coordinate), "y_centroid" (y coordinate),
-"cluster" (cluster label) and "rep" (replicate).}
+cluster label and sample for each cell.The column names must include
+"x" (x coordinate), "y" (y coordinate),
+"cluster" (cluster label) and "sample" (sample).}
 
 \item{cm_lst}{A list of named matrices containing the count matrix for
-each replicate. The name must match the rep column in \code{cluster_info}.
+each sample The name must match the sample column in \code{cluster_info}.
 If this input is provided, the \code{cluster_info} must be specified and
 contain an additional column "cell_id" to link cell location and
 count matrix. Default is NULL.}

@@ -2,8 +2,7 @@
 % Please edit documentation in R/lasso_markers.R
 \name{get_lasso_coef}
 \alias{get_lasso_coef}
-\title{help function to get lasso coefficient for every cluster 
-for a  given model}
+\title{help function to get lasso coefficient for every cluster for a given model}
 \usage{
 get_lasso_coef(
     i_gene,
@@ -19,9 +18,9 @@ get_lasso_coef(
 \item{i_gene}{Name of the current gene}
 
 \item{gene_mt}{A matrix contains the transcript count in each grid.
-Each row refers to a grid, and each column refers to a gene. 
-The column names must be specified and refer to the genes. 
-This can be the output from the function \code{\link{get_vectors}}.}
+Each row refers to a grid, and each column refers to a gene. The column
+names must be specified and refer to the genes. This can be the
+output from the function \code{\link{get_vectors}}.}
 
 \item{vec_cluster}{A matrix of the spatial vectors for clusters.}
 
@@ -33,7 +32,7 @@ to calculate a penalty term for every gene.}
 
 \item{n_samples}{A positive number giving the number samples}
 
-\item{sample_names}{A vector specifying the names for the replicates.}
+\item{sample_names}{A vector specifying the names for the sample}
 }
 \value{
 a list of two matrices with the following components

@@ -15,9 +15,8 @@ create_genesets(
 )
 }
 \arguments{
-\item{data_lst}{A list of named matrices containing the coordiantes 
-of transcripts. This can be the output from the 
-function \code{\link{get_data}}.}
+\item{data_lst}{A list of named matrices containing the coordiantes of 
+transcripts. This can be the output from the function \code{\link{get_data}}.}
 
 \item{name_lst}{A named list of strings giving the name of features that are
 treated as background.}
@@ -38,38 +37,35 @@ limits of enclosing box.}
 limits of enclosing box.}
 
 \item{cluster_info}{A dataframe/matrix containing the centroid coordinates,
-cluster label and replicate for each cell.The column names must include
-"x_centroid" (x coordinate), "y_centroid" (y coordinate),
-"cluster" (cluster label) and "rep" (replicate).}
+cluster and sample label for each cell.The column names must include
+"x" (x coordinate), "y" (y coordinate),
+"cluster" (cluster label) and "sample" (sample).}
 }
 \value{
 A matrix contains the sum count in each grid.
-Each row refers to a grid, and each column refers to a set in \code{name_lst}.
+Each row refers to a grid, each column refers to a set in \code{name_lst}.
 The column name will match the names in \code{name_lst}.
 }
 \description{
 Convert the coordinates of set of genes into vectors.
 }
-\details{
-If there are multiple replicates in the \code{data_lst}, then the features in
-}
 \examples{
 set.seed(15)
-trans = as.data.frame(rbind(cbind(x_location = runif(10, min=1, max=10),
-                                y_location = runif(10, min=1, max=10),
+trans = as.data.frame(rbind(cbind(x = runif(10, min=1, max=10),
+                                y = runif(10, min=1, max=10),
                                 feature_name="A"),
-                            cbind(x_location = runif(5, min=10, max=24),
-                                y_location = runif(5, min=1, max=10),
-                                feature_name="B"),
-                            cbind(x_location = runif(10, min=10, max=24),
-                                y_location = runif(10, min=10, max=24),
-                                feature_name="C")))
-trans$x_location = as.numeric(trans$x_location)
-trans$y_location = as.numeric(trans$y_location)
+                         cbind(x = runif(5, min=10, max=24),
+                               y = runif(5, min=1, max=10),
+                               feature_name="B"),
+                         cbind(x = runif(10, min=10, max=24),
+                               y = runif(10, min=10, max=24),
+                               feature_name="C")))
+trans$x = as.numeric(trans$x)
+trans$y = as.numeric(trans$y)
 data=list(trans_info=trans)
 geneset_res = create_genesets(data_lst=list("rep1"= data),
                             name_lst=list(dummy_A=c("A","C"),
-                                    dummy_B=c("A","B","C")),
+                                            dummy_B=c("A","B","C")),
                             bin_type="square",
                             bin_param=c(2,2),
                             w_x=c(0,25), w_y=c(0,25))

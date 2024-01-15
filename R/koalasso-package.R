@@ -45,7 +45,7 @@
 #'     \item{x_centroid}{x coordinates}
 #'     \item{y_centroid}{y coordiantes}
 #'     \item{cells}{cell id}
-#'     \item{rep}{replicate id}
+#'     \item{sample}{sample id}
 #' }
 #' @usage data(rep1_clusters)
 #' @return  data frame
@@ -104,7 +104,7 @@
 #'     \item{x_centroid}{x coordinates}
 #'     \item{y_centroid}{y coordiantes}
 #'     \item{cells}{cell id}
-#'     \item{rep}{replicate id}
+#'     \item{sample}{sample id}
 #' }
 #' @usage data(rep2_clusters)
 #' @return  data frame

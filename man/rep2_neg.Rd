@@ -9,7 +9,7 @@ A list of named matrices generated from get_data():
 \describe{
     \item{cm}{the count matrix for negative control genes}
     \item{trans_info}{a data frame containing the coordiantes for 
-    every transcript}
+                     every transcript}
     \item{probe}{names of negative control probe genes}
     \item{codeword}{names of negative control codeword genes}
 }

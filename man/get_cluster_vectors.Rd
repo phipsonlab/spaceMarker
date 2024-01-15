@@ -8,9 +8,9 @@ get_cluster_vectors(cluster_info, bin_length, bin_type, bin_param, w_x, w_y)
 }
 \arguments{
 \item{cluster_info}{A dataframe/matrix containing the centroid coordinates,
-cluster label and replicate for each cell.The column names must include
-"x_centroid" (x coordinate), "y_centroid" (y coordinate),
-"cluster" (cluster label) and "rep" (replicate).}
+cluster label and sample for each cell.The column names must include
+"x" (x coordinate), "y" (y coordinate),
+"cluster" (cluster label) and "sample" (sample).}
 
 \item{bin_length}{A positive integer giving the length of total bins}
 

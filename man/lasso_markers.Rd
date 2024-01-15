@@ -26,7 +26,7 @@ to a cluster. The column names must be specified and refer to the clusters.
 Please do not assign integers as column names.
 This can be the output from the function \code{\link{get_vectors}}.}
 
-\item{sample_names}{A vector specifying the names for the replicates.}
+\item{sample_names}{A vector specifying the names for the samples.}
 
 \item{keep_positive}{A logical flag indicating whether to return positively
 correlated clusters or not.}
@@ -88,8 +88,8 @@ for each gene.
 \details{
 This function will take the converted gene and cluster vectors from function
 \code{\link{get_vectors}}, and return the most relevant cluster label for
-each gene. If there are multiple replicates in the dataset, this function
-will find shared markers across different replicates by including additional
+each gene. If there are multiple samples in the dataset, this function
+will find shared markers across different samples by including additional
 sample vectors in the input \code{cluster_mt}.
 
 This function treats all input cluster vectors as features, and create
@@ -125,36 +125,36 @@ we will return "NoSig" for this gene.
 set.seed(100)
 #  simulate coordiantes for clusters
 df_clA = data.frame(x_centroid = rnorm(n=100, mean=20, sd=5),
-                 y_centroid = rnorm(n=100, mean=20, sd=5), cluster="A")
+                y_centroid = rnorm(n=100, mean=20, sd=5), cluster="A")
 df_clB = data.frame(x_centroid = rnorm(n=100, mean=100, sd=5),
                 y_centroid = rnorm(n=100, mean=100, sd=5), cluster="B")
 
 clusters = rbind(df_clA, df_clB)
-clusters$rep="rep1"
+clusters$sample="rep1"
 
 # simulate coordiantes for genes
 trans_info = data.frame(rbind(cbind(x_location = rnorm(n=100, mean=20,sd=5),
-                                y_location = rnorm(n=100, mean=20, sd=5),
-                                 feature_name="gene_A1"),
-                           cbind(x_location = rnorm(n=100, mean=20, sd=5),
-                                 y_location = rnorm(n=100, mean=20, sd=5),
-                                 feature_name="gene_A2"),
-                           cbind(x_location = rnorm(n=100, mean=100, sd=5),
-                                 y_location = rnorm(n=100, mean=100, sd=5),
-                                 feature_name="gene_B1"),
-                           cbind(x_location = rnorm(n=100, mean=100, sd=5),
-                                 y_location = rnorm(n=100, mean=100, sd=5),
-                                 feature_name="gene_B2")))
+                            y_location = rnorm(n=100, mean=20, sd=5),
+                            feature_name="gene_A1"),
+                            cbind(x_location = rnorm(n=100, mean=20, sd=5),
+                            y_location = rnorm(n=100, mean=20, sd=5),
+                            feature_name="gene_A2"),
+                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
+                            y_location = rnorm(n=100, mean=100, sd=5),
+                            feature_name="gene_B1"),
+                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
+                            y_location = rnorm(n=100, mean=100, sd=5),
+                            feature_name="gene_B2")))
 trans_info$x_location=as.numeric(trans_info$x_location)
 trans_info$y_location=as.numeric(trans_info$y_location)
 w_x =  c(min(floor(min(trans_info$x_location)),
-         floor(min(clusters$x_centroid))),
-      max(ceiling(max(trans_info$x_location)),
-          ceiling(max(clusters$x_centroid))))
+            floor(min(clusters$x_centroid))),
+            max(ceiling(max(trans_info$x_location)),
+            ceiling(max(clusters$x_centroid))))
 w_y =  c(min(floor(min(trans_info$y_location)),
-          floor(min(clusters$y_centroid))),
-      max(ceiling(max(trans_info$y_location)),
-          ceiling(max(clusters$y_centroid))))
+            floor(min(clusters$y_centroid))),
+            max(ceiling(max(trans_info$y_location)),
+            ceiling(max(clusters$y_centroid))))
 data = list(trans_info = trans_info)
 vecs_lst = get_vectors(data_lst=list(rep1=data), cluster_info = clusters,
                     bin_type = "square",

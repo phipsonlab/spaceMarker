@@ -22,9 +22,9 @@ compute_permp(
 \item{data}{A list of matrices containing the coordinates of transcripts.
 This can be the output from the function \code{\link{get_data}}.}
 
-\item{cluster_info}{A dataframe/matrix containing the centroid coordinates and
-cluster label for each cell.The column names should include "x" (x coordinate),
-"y" (y coordinate), and "cluster" (cluster label).}
+\item{cluster_info}{A dataframe/matrix containing the centroid coordinates
+and cluster label for each cell.The column names should include "x"
+(x coordinate), "y" (y coordinate), and "cluster" (cluster label).}
 
 \item{perm.size}{A positive number specifying permutation times}
 
@@ -37,8 +37,8 @@ two giving the numbers of rectangular quadrats in the x and y directions. If
 the \code{bin_type} is "hexagonal", this will be a number giving the side
 length of hexagons. Positive numbers only.}
 
-\item{all_genes}{A vector of strings giving the name of the genes you want to
-test correlation for.
+\item{all_genes}{A vector of strings giving the name of the genes you
+want to test correlation for.
 \code{gene_mt}.}
 
 \item{correlation_method}{A parameter pass to \code{\link{cor}} indicating
@@ -77,46 +77,46 @@ This function will run permutation framework to compute a p-value for the
 correlation between the vectorised genes and clusters each cluster.
 }
 \details{
-To get a permutation p-value for the correlation between a gene and a cluster,
-this function will permute the cluster label for each cell randomly,
-and calculate correlation between the genes and permuted clusters.
-This process will be repeated for \code{perm.size} times,
-and permutation p-value is calculated as the probability of permuted
-correlations larger than the observation correlation.
+To get a permutation p-value for the correlation between a gene
+and a cluster, this function will permute the cluster label for
+each cell randomly, and calculate correlation between the genes and
+permuted clusters. This process will be repeated for \code{perm.size}
+times, and permutation p-value is calculated as the probability of
+permuted correlations larger than the observation correlation.
 }
 \examples{
 
 set.seed(100)
 # simulate coordiantes for clusters
-df_clA = data.frame(x_centroid = rnorm(n=100, mean=20, sd=5),
-                    y_centroid = rnorm(n=100, mean=20, sd=5), cluster="A")
-df_clB = data.frame(x_centroid = rnorm(n=100, mean=100, sd=5),
-                    y_centroid = rnorm(n=100, mean=100, sd=5), cluster="B")
+df_clA = data.frame(x = rnorm(n=100, mean=20, sd=5),
+                   y = rnorm(n=100, mean=20, sd=5), cluster="A")
+df_clB = data.frame(x = rnorm(n=100, mean=100, sd=5),
+                  y = rnorm(n=100, mean=100, sd=5), cluster="B")
 clusters = rbind(df_clA, df_clB)
-clusters$rep="rep1"
+clusters$sample="rep1"
 # simulate coordiantes for genes
-trans_info = data.frame(rbind(cbind(x_location = rnorm(n=100, mean=20, sd=5),
-                                    y_location = rnorm(n=100, mean=20, sd=5),
-                                feature_name="gene_A1"),
-                            cbind(x_location = rnorm(n=100, mean=20, sd=5),
-                                y_location = rnorm(n=100, mean=20, sd=5),
-                                feature_name="gene_A2"),
-                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
-                                y_location = rnorm(n=100, mean=100, sd=5),
-                                feature_name="gene_B1"),
-                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
-                                y_location = rnorm(n=100, mean=100, sd=5),
-                                feature_name="gene_B2")))
-trans_info$x_location=as.numeric(trans_info$x_location)
-trans_info$y_location=as.numeric(trans_info$y_location)
-w_x =  c(min(floor(min(trans_info$x_location)),
-            floor(min(clusters$x_centroid))),
-        max(ceiling(max(trans_info$x_location)),
-            ceiling(max(clusters$x_centroid))))
-w_y =  c(min(floor(min(trans_info$y_location)),
-            floor(min(clusters$y_centroid))),
-        max(ceiling(max(trans_info$y_location)),
-            ceiling(max(clusters$y_centroid))))
+trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20, sd=5),
+                                    y = rnorm(n=100, mean=20, sd=5),
+                                 feature_name="gene_A1"),
+                           cbind(x = rnorm(n=100, mean=20, sd=5),
+                                 y = rnorm(n=100, mean=20, sd=5),
+                                 feature_name="gene_A2"),
+                           cbind(x = rnorm(n=100, mean=100, sd=5),
+                                 y = rnorm(n=100, mean=100, sd=5),
+                                 feature_name="gene_B1"),
+                           cbind(x = rnorm(n=100, mean=100, sd=5),
+                                 y = rnorm(n=100, mean=100, sd=5),
+                                 feature_name="gene_B2")))
+trans_info$x=as.numeric(trans_info$x)
+trans_info$y=as.numeric(trans_info$y)
+w_x =  c(min(floor(min(trans_info$x)),
+            floor(min(clusters$x))),
+        max(ceiling(max(trans_info$x)),
+            ceiling(max(clusters$x))))
+w_y =  c(min(floor(min(trans_info$y)),
+         floor(min(clusters$y))),
+      max(ceiling(max(trans_info$y)),
+          ceiling(max(clusters$y))))
 rep1 = list(trans_info = trans_info)
 perm_res_lst = compute_permp(data=rep1,
                     cluster_info=clusters,

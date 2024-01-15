@@ -22,13 +22,13 @@ This can be the output from the function \code{\link{get_data}}.
 Optional parameter.}
 
 \item{cluster_info}{A dataframe/matrix containing the centroid coordinates,
-cluster label and replicate for each cell.The column names must include
-"x_centroid" (x coordinate), "y_centroid" (y coordinate),
-"cluster" (cluster label) and "rep" (replicate).}
+cluster label and sample for each cell.The column names must include
+"x" (x coordinate), "y" (y coordinate),
+"cluster" (cluster label) and "sample" (sample).}
 
 \item{cm_lst}{A list of named matrices containing the count matrix for
-each replicate.
-The name must match the rep column in \code{cluster_info}. If this input
+each sample
+The name must match the sample column in \code{cluster_info}. If this input
 is provided, the \code{cluster_info} must be specified and contain an
 additional column "cell_id" to link cell location and count matrix.
 Default is NULL.}
@@ -70,7 +70,7 @@ This function can be used to generate input for \code{\link{lasso_markers}}
 by specifying all the parameters.
 
 Suppose the input data contains \eqn{n} genes, \eqn{c} clusters, and
-\eqn{k} replicates, we
+\eqn{k} samples, we
 want to use \eqn{a \times a} square bin to convert the coordinates
 of genes and clusters into 1d vectors.
 
@@ -78,10 +78,10 @@ If \eqn{k=1}, the returned list will contain one matrix for gene vectors
 (\code{gene_mt}) of dimension \eqn{a^2 \times n} and one matrix for
 cluster vectors (\code{cluster_mt}) of dimension \eqn{a^2 \times c}.
 
-If \eqn{k>1}, gene and cluster vectors are constructed for each replicate
+If \eqn{k>1}, gene and cluster vectors are constructed for each sample
 separately and concat together. There will be additional k columns on the
 returned \code{cluster_mt}, which is the one-hot encoding of the
-replicate information.
+sample information.
 
 Moreover, this function can vectorise genes and clusters separately based
 on the input. If \code{data_lst} is NULL, this function will
@@ -91,20 +91,16 @@ based on \code{data_lst}.
 }
 \examples{
 # simulate coordiantes for genes
-trans = as.data.frame(rbind(cbind(x_location = c(1,2,20,21,22,23,24),
-                                y_location = c(23, 24, 1,2,3,4,5),
-                                feature_name="A"),
-                            cbind(x_location = c(1,20),
-                                y_location = c(15, 10),
-                                feature_name="B"),
-                            cbind(x_location = c(1,2,20,21,22,23,24),
-                                y_location = c(23, 24, 1,2,3,4,5),
-                                feature_name="C")))
-trans$x_location = as.numeric(trans$x_location)
-trans$y_location = as.numeric(trans$y_location)
-clusters = data.frame(x_centroid = c(3, 5,11,21,2,23,19),
-                    y_centroid = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
-clusters$rep="rep1"
+trans = as.data.frame(rbind(cbind(x = c(1,2,20,21,22,23,24),
+                                y = c(23, 24, 1,2,3,4,5), feature_name="A"),
+                            cbind(x = c(1,20), y = c(15, 10),feature_name="B"),
+                            cbind(x = c(1,2,20,21,22,23,24),
+                                y = c(23, 24, 1,2,3,4,5),feature_name="C")))
+trans$x = as.numeric(trans$x)
+trans$y = as.numeric(trans$y)
+clusters = data.frame(x = c(3, 5,11,21,2,23,19),
+                        y = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
+clusters$sample="rep1"
 data=list(trans_info=trans)
 vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
                             cluster_info = clusters,
@@ -121,9 +117,9 @@ cm <- data.frame(rbind("gene_A"=c(0,0,2,0,0,0,2),
                         "gene_D"=c(0,1,1,2,0,0,2)))
 colnames(cm)= paste("cell_", 1:7, sep="")
 # simulate coordiantes for clusters
-clusters = data.frame(x_centroid = c(1, 2,20,21,22,23,24),
-                y_centroid = c(23, 24, 1,2,3,4,5), cluster="A")
-clusters$rep="rep1"
+clusters = data.frame(x = c(1, 2,20,21,22,23,24),
+                    y = c(23, 24, 1,2,3,4,5), cluster="A")
+clusters$sample="rep1"
 clusters$cell_id= colnames(cm)
 vecs_lst = get_vectors(data_lst= NULL, cluster_info = clusters,
                         cm_lst=list(rep1=cm),

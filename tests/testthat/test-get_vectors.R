@@ -1,8 +1,8 @@
 
 # simulate coordiantes for clusters
-clusters = data.frame(x_centroid = c(1,2,20,21,22,23,24),
-                    y_centroid = c(23, 24, 1,2,3,4,5), cluster="A")
-clusters$rep="rep1"
+clusters = data.frame(x = c(1,2,20,21,22,23,24),
+                    y = c(23, 24, 1,2,3,4,5), cluster="A")
+clusters$sample="rep1"
 
 w_x=c(0,25)
 w_y=c(0,25)
@@ -22,8 +22,8 @@ test_that("Test can only vectorise clusters - output vector matches", {
 
 #############################################################################
 # simulate coordiantes for genes
-trans = data.frame(x_location = c(1,2,20,21,22,23,24),
-                   y_location = c(23, 24, 1,2,3,4,5),
+trans = data.frame(x = c(1,2,20,21,22,23,24),
+                   y = c(23, 24, 1,2,3,4,5),
                    feature_name="A")
 data=list(trans_info=trans)
 w_x=c(0,25)
@@ -40,21 +40,21 @@ test_that("Test can only vectorise genes - output length mathces", {
 
 #############################################################################
 # simulate coordiantes for genes
-trans = as.data.frame(rbind(cbind(x_location = c(1,2,20,21,22,23,24),
-                                  y_location = c(23, 24, 1,2,3,4,5),
+trans = as.data.frame(rbind(cbind(x = c(1,2,20,21,22,23,24),
+                                  y = c(23, 24, 1,2,3,4,5),
                                   feature_name="A"),
-                            cbind(x_location = c(1,20),
-                                  y_location = c(15, 10),
+                            cbind(x = c(1,20),
+                                  y = c(15, 10),
                                   feature_name="B"),
-                            cbind(x_location = c(1,2,20,21,22,23,24),
-                                  y_location = c(23, 24, 1,2,3,4,5),
+                            cbind(x = c(1,2,20,21,22,23,24),
+                                  y = c(23, 24, 1,2,3,4,5),
                                   feature_name="C")))
 
-trans$x_location = as.numeric(trans$x_location)
-trans$y_location = as.numeric(trans$y_location)
-clusters = data.frame(x_centroid = c(3, 5,11,21,2,23,19),
-                      y_centroid = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
-clusters$rep="rep1"
+trans$x = as.numeric(trans$x)
+trans$y = as.numeric(trans$y)
+clusters = data.frame(x = c(3, 5,11,21,2,23,19),
+                      y = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
+clusters$sample="rep1"
 
 data=list(trans_info=trans)
 w_x=c(0,25)
@@ -82,9 +82,9 @@ cm <- data.frame(rbind("gene_A"=c(0,0,2,0,0,0,2),
 colnames(cm)= paste("cell_", 1:7, sep="")
 
 # simulate coordiantes for clusters
-clusters = data.frame(x_centroid = c(1, 2,20,21,22,23,24),
-                      y_centroid = c(23, 24, 1,2,3,4,5), cluster="A")
-clusters$rep="rep1"
+clusters = data.frame(x = c(1, 2,20,21,22,23,24),
+                      y = c(23, 24, 1,2,3,4,5), cluster="A")
+clusters$sample="rep1"
 clusters$cell_id= colnames(cm)
 # simulate coordiantes for genes
 w_x=c(0,25)

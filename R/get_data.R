@@ -63,11 +63,11 @@ get_data<-function(path,mtx_name, trans_name="transcript_info.csv.gz",
     cm_neg <- as.data.frame(rbind(r_probe, r_codeword))
     zero_cells <- colnames(cm)[colSums(cm)==0]
 
-    transcript_info$x_location <- as.numeric(transcript_info$x_location)
-    transcript_info$y_location <- as.numeric(transcript_info$y_location)
+    transcript_info$x <- as.numeric(transcript_info$x_location)
+    transcript_info$y <- as.numeric(transcript_info$y_location)
 
-    cell_info$x_centroid <- as.numeric(cell_info$x_centroid)
-    cell_info$y_centroid <- as.numeric(cell_info$y_centroid)
+    cell_info$x <- as.numeric(cell_info$x_centroid)
+    cell_info$y <- as.numeric(cell_info$y_centroid)
 
     return (list(cm = cm, cm_neg=cm_neg, zero_cells = zero_cells,
                     trans_info=transcript_info, cell_info=cell_info,

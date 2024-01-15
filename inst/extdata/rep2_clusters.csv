@@ -1,4 +1,4 @@
-"","anno","cluster","x_centroid","y_centroid","cells","rep"
+"","anno","cluster","x","y","cells","sample"
 "1","Macrophages","c4",479.934466552734,869.789633178711,"1","rep2"
 "2","Stromal","c3",481.256988525391,851.689364624023,"2","rep2"
 "3","Stromal","c3",490.647247314453,855.816201782227,"3","rep2"

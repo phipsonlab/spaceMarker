@@ -36,8 +36,8 @@ get_gene_vectors_tr<- function(data_lst, all_genes, bin_type, bin_param,
         vec_gene <- c()
         for (rpp in data_lst){
             curr <- rpp$trans_info[rpp$trans_info$feature_name==i_gene,
-                                c("x_location","y_location")] %>% distinct()
-            gene_ppp <- ppp(curr$x_location,curr$y_location,w_x, w_y)
+                                c("x","y")] %>% distinct()
+            gene_ppp <- ppp(curr$x,curr$y,w_x, w_y)
             # create gene vector
             if (bin_type == "hexagon"){
                 w <- owin(xrange=w_x, yrange=w_y)
@@ -61,11 +61,11 @@ get_gene_vectors_tr<- function(data_lst, all_genes, bin_type, bin_param,
 #' @description
 #' This function will build gene vectors with count matrix and cell locations
 #' @param cluster_info A dataframe/matrix containing the centroid coordinates,
-#' cluster label and replicate for each cell.The column names must include
-#' "x_centroid" (x coordinate), "y_centroid" (y coordinate),
-#' "cluster" (cluster label) and "rep" (replicate).
+#' cluster label and sample for each cell.The column names must include
+#' "x" (x coordinate), "y" (y coordinate),
+#' "cluster" (cluster label) and "sample" (sample).
 #' @param cm_lst A list of named matrices containing the count matrix for
-#' each replicate. The name must match the rep column in \code{cluster_info}.
+#' each sample The name must match the sample column in \code{cluster_info}.
 #' If this input is provided, the \code{cluster_info} must be specified and
 #' contain an additional column "cell_id" to link cell location and
 #' count matrix. Default is NULL.
@@ -114,19 +114,19 @@ get_gene_vectors_cm<- function(cluster_info, cm_lst, bin_type, bin_param,
     index_vec <- NULL
     # use count matrix to build gene vector matrix
     if (bin_type == "hexagon"){
-    tile_indices <- tileindex(x=cluster_info$x_centroid,
-                            y=cluster_info$y_centroid, Z=H)
+    tile_indices <- tileindex(x=cluster_info$x,
+                            y=cluster_info$y, Z=H)
     cluster_info$index_vec  <- match(tile_indices,levels(tile_indices))
     }else{
-    all_cell_intervals <- as.tess(quadratcount(ppp(cluster_info$x_centroid,
-                                    cluster_info$y_centroid,
+    all_cell_intervals <- as.tess(quadratcount(ppp(cluster_info$x,
+                                    cluster_info$y,
                                     w_x, w_y),
                                     bin_param[1],bin_param[2]))
-    cluster_info$index_x <- findInterval(cluster_info$x_centroid,
+    cluster_info$index_x <- findInterval(cluster_info$x,
                                     all_cell_intervals$xgrid,
                                     all.inside = TRUE, left.open=FALSE,
                                     rightmost.closed=TRUE )
-    cluster_info$index_y <- findInterval(cluster_info$y_centroid,
+    cluster_info$index_y <- findInterval(cluster_info$y,
                                     all_cell_intervals$ygrid,
                                     all.inside = TRUE, left.open=FALSE,
                                     rightmost.closed=TRUE )
@@ -146,7 +146,7 @@ get_gene_vectors_cm<- function(cluster_info, cm_lst, bin_type, bin_param,
         for (rp_nm in names(cm_lst)){
         cm <- cm_lst[[rp_nm]]
         vec_g <- rep(0, bin_length)
-        i_gene_mt <- cluster_info[cluster_info$rep==rp_nm, ]
+        i_gene_mt <- cluster_info[cluster_info$sample==rp_nm, ]
         i_gene_mt$count_value <- as.numeric(cm[i_gene,i_gene_mt$cell_id])
         i_gene_mt$index_vec <- factor(i_gene_mt$index_vec )
         added_count <- i_gene_mt %>% group_by(index_vec) %>%
@@ -163,9 +163,9 @@ get_gene_vectors_cm<- function(cluster_info, cm_lst, bin_type, bin_param,
 #' Create spatial vectors for clusters
 #'
 #' @param cluster_info A dataframe/matrix containing the centroid coordinates,
-#' cluster label and replicate for each cell.The column names must include
-#' "x_centroid" (x coordinate), "y_centroid" (y coordinate),
-#' "cluster" (cluster label) and "rep" (replicate).
+#' cluster label and sample for each cell.The column names must include
+#' "x" (x coordinate), "y" (y coordinate),
+#' "cluster" (cluster label) and "sample" (sample).
 #' @param bin_length A positive integer giving the length of total bins
 #' @param bin_type A string indicating which bin shape is to be used for
 #' vectorization. One of "square" (default), "rectangle", or "hexagon".
@@ -184,7 +184,7 @@ get_gene_vectors_cm<- function(cluster_info, cm_lst, bin_type, bin_param,
 #'
 get_cluster_vectors<- function(cluster_info,bin_length,bin_type, bin_param,
                                 w_x, w_y){
-    sample_names <- unique(as.character(cluster_info$rep))
+    sample_names <- unique(as.character(cluster_info$sample))
     n_clusters <- length(unique(cluster_info$cluster))
     n_samples <- length(sample_names)
     cluster_names <- unique(as.character(cluster_info$cluster))
@@ -208,12 +208,12 @@ get_cluster_vectors<- function(cluster_info,bin_length,bin_type, bin_param,
     for (nm in sample_cluster_nm ){
         rp <- unlist(strsplit(nm, split="--"))[1]
         cl <- unlist(strsplit(nm, split="--"))[2]
-        cluster_ppp <- ppp(cluster_info[cluster_info$rep==rp &
+        cluster_ppp <- ppp(cluster_info[cluster_info$sample==rp &
                                         cluster_info$cluster==cl,
-                                        "x_centroid"],
-                        cluster_info[cluster_info$rep==rp &
+                                        "x"],
+                        cluster_info[cluster_info$sample==rp &
                                         cluster_info$cluster==cl,
-                                        "y_centroid"], w_x, w_y)
+                                        "y"], w_x, w_y)
         if (bin_type == "hexagon"){
             w <- owin(xrange=w_x, yrange=w_y)
             H <- hextess(W=w, bin_param[1])
@@ -282,7 +282,7 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #' by specifying all the parameters.
 #'
 #' Suppose the input data contains \eqn{n} genes, \eqn{c} clusters, and
-#' \eqn{k} replicates, we
+#' \eqn{k} samples, we
 #' want to use \eqn{a \times a} square bin to convert the coordinates
 #' of genes and clusters into 1d vectors.
 #'
@@ -290,10 +290,10 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #' (\code{gene_mt}) of dimension \eqn{a^2 \times n} and one matrix for
 #' cluster vectors (\code{cluster_mt}) of dimension \eqn{a^2 \times c}.
 #'
-#' If \eqn{k>1}, gene and cluster vectors are constructed for each replicate
+#' If \eqn{k>1}, gene and cluster vectors are constructed for each sample
 #' separately and concat together. There will be additional k columns on the
 #' returned \code{cluster_mt}, which is the one-hot encoding of the
-#' replicate information.
+#' sample information.
 #'
 #' Moreover, this function can vectorise genes and clusters separately based
 #' on the input. If \code{data_lst} is NULL, this function will
@@ -306,12 +306,12 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #' This can be the output from the function \code{\link{get_data}}.
 #' Optional parameter.
 #' @param cluster_info A dataframe/matrix containing the centroid coordinates,
-#' cluster label and replicate for each cell.The column names must include
-#' "x_centroid" (x coordinate), "y_centroid" (y coordinate),
-#' "cluster" (cluster label) and "rep" (replicate).
+#' cluster label and sample for each cell.The column names must include
+#' "x" (x coordinate), "y" (y coordinate),
+#' "cluster" (cluster label) and "sample" (sample).
 #' @param cm_lst A list of named matrices containing the count matrix for
-#' each replicate.
-#' The name must match the rep column in \code{cluster_info}. If this input
+#' each sample
+#' The name must match the sample column in \code{cluster_info}. If this input
 #' is provided, the \code{cluster_info} must be specified and contain an
 #' additional column "cell_id" to link cell location and count matrix.
 #' Default is NULL.
@@ -347,20 +347,20 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #' @export
 #' @examples
 #' # simulate coordiantes for genes
-#' trans = as.data.frame(rbind(cbind(x_location = c(1,2,20,21,22,23,24),
-#'                                  y_location = c(23, 24, 1,2,3,4,5),
+#' trans = as.data.frame(rbind(cbind(x = c(1,2,20,21,22,23,24),
+#'                                  y = c(23, 24, 1,2,3,4,5),
 #'                                  feature_name="A"),
-#'                          cbind(x_location = c(1,20),
-#'                                y_location = c(15, 10),
+#'                          cbind(x = c(1,20),
+#'                                y = c(15, 10),
 #'                                feature_name="B"),
-#'                          cbind(x_location = c(1,2,20,21,22,23,24),
-#'                                y_location = c(23, 24, 1,2,3,4,5),
+#'                          cbind(x = c(1,2,20,21,22,23,24),
+#'                                y = c(23, 24, 1,2,3,4,5),
 #'                                feature_name="C")))
-#' trans$x_location = as.numeric(trans$x_location)
-#' trans$y_location = as.numeric(trans$y_location)
-#' clusters = data.frame(x_centroid = c(3, 5,11,21,2,23,19),
-#'                     y_centroid = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
-#' clusters$rep="rep1"
+#' trans$x = as.numeric(trans$x)
+#' trans$y = as.numeric(trans$y)
+#' clusters = data.frame(x = c(3, 5,11,21,2,23,19),
+#'                     y = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
+#' clusters$sample="rep1"
 #' data=list(trans_info=trans)
 #' vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
 #'                             cluster_info = clusters,
@@ -378,9 +378,9 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #' colnames(cm)= paste("cell_", 1:7, sep="")
 
 #' # simulate coordiantes for clusters
-#' clusters = data.frame(x_centroid = c(1, 2,20,21,22,23,24),
-#'             y_centroid = c(23, 24, 1,2,3,4,5), cluster="A")
-#' clusters$rep="rep1"
+#' clusters = data.frame(x = c(1, 2,20,21,22,23,24),
+#'             y = c(23, 24, 1,2,3,4,5), cluster="A")
+#' clusters$sample="rep1"
 #' clusters$cell_id= colnames(cm)
 
 #' vecs_lst = get_vectors(data_lst= NULL, cluster_info = clusters,
@@ -400,32 +400,32 @@ get_vectors<- function(data_lst, cluster_info,cm_lst=NULL, bin_type, bin_param,
         stop("Invalid input, no coordinates information is specified")
     }
     if ((is.null(cluster_info) == FALSE)){
-        req_cols <- c("x_centroid","y_centroid","cluster","rep")
+        req_cols <- c("x","y","cluster","sample")
         if (length(setdiff(req_cols, colnames(cluster_info))) != 0){
             stop("Invalid columns in input clusters. Input clusters must
-            contain columns 'x_centroid', 'y_centroid', 'cluster', 'rep'
+            contain columns 'x', 'y', 'cluster', 'sample'
                 for every cell")
         }
         if ((is.null(cm_lst) == FALSE)){
-            if (length(setdiff(unique(cluster_info$rep), names(cm_lst))) !=0){
-                stop("Mismatched replicate names in cluster_info and cm_lst") }
+            if (length(setdiff(unique(cluster_info$sample), names(cm_lst))) !=0){
+                stop("Mismatched sample names in cluster_info and cm_lst") }
             # must contain cell id
-            req_cols <- c("x_centroid","y_centroid","cluster","rep","cell_id")
+            req_cols <- c("x","y","cluster","sample","cell_id")
             if (length(setdiff(req_cols, colnames(cluster_info))) !=0){
                 stop("Invalid columns in input clusters. Input cluster_info
-                    must contain columns 'x_centroid', 'y_centroid', 'cluster',
-                    'rep','cell_id' for every cell") }
+                    must contain columns 'x', 'y', 'cluster',
+                    'sample','cell_id' for every cell") }
         }
     }
 
     if ((is.null(data_lst) == FALSE) ){
         if ((is.vector(all_genes) == FALSE)){
             stop("Invalid input all_genes, should be a vector of character")}
-        req_cols <- c("x_location", "y_location","feature_name")
+        req_cols <- c("x", "y","feature_name")
         for (rpp in data_lst){
             if (length(setdiff(req_cols, colnames(rpp$trans_info))) > 0)
                 stop("Invalid column names detected in input data_lst.
-                        Must contain columns 'x_location', 'y_location',
+                        Must contain columns 'x', 'y',
                         'feature_name' for every transcript")
         }
     }

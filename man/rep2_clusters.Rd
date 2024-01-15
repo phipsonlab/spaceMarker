@@ -12,7 +12,7 @@ A data frame with 1815 rows and and 6 variables:
     \item{x_centroid}{x coordinates}
     \item{y_centroid}{y coordiantes}
     \item{cells}{cell id}
-    \item{rep}{replicate id}
+    \item{sample}{sample id}
 }
 }
 \source{

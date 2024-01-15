@@ -24,7 +24,7 @@ refers to a cluster. The column names must be specified and refer to the
 clusters. Please do not assign integers as column names.
 This can be the output from the function \code{\link{get_vectors}}.}
 
-\item{sample_names}{A vector specifying the names for the replicates.}
+\item{sample_names}{A vector specifying the names for the samples.}
 
 \item{n_fold}{Optional. A positive number giving the number of folds used
 for cross validation. This parameter will pass to \code{\link{cv.glmnet}}

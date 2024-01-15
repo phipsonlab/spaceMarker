@@ -1,14 +1,14 @@
 
 # simulate coordiantes for genes
 set.seed(15)
-trans = as.data.frame(rbind(cbind(x_location = runif(10, min=1, max=10),
-                                  y_location = runif(10, min=1, max=10), feature_name="A"),
-                            cbind(x_location = runif(5, min=10, max=24),
-                                  y_location = runif(5, min=1, max=10), feature_name="B"),
-                            cbind(x_location = runif(10, min=10, max=24),
-                                  y_location = runif(10, min=10, max=24), feature_name="C")))
-trans$x_location = as.numeric(trans$x_location)
-trans$y_location = as.numeric(trans$y_location)
+trans = as.data.frame(rbind(cbind(x = runif(10, min=1, max=10),
+                                  y = runif(10, min=1, max=10), feature_name="A"),
+                            cbind(x = runif(5, min=10, max=24),
+                                  y = runif(5, min=1, max=10), feature_name="B"),
+                            cbind(x = runif(10, min=10, max=24),
+                                  y = runif(10, min=10, max=24), feature_name="C")))
+trans$x = as.numeric(trans$x)
+trans$y = as.numeric(trans$y)
 
 data=list(trans_info=trans)
 
