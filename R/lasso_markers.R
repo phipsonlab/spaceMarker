@@ -276,37 +276,37 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #'
 #' set.seed(100)
 #' #  simulate coordiantes for clusters
-#' df_clA = data.frame(x_centroid = rnorm(n=100, mean=20, sd=5),
-#'                  y_centroid = rnorm(n=100, mean=20, sd=5), cluster="A")
-#' df_clB = data.frame(x_centroid = rnorm(n=100, mean=100, sd=5),
-#'                 y_centroid = rnorm(n=100, mean=100, sd=5), cluster="B")
+#' df_clA = data.frame(x = rnorm(n=100, mean=20, sd=5),
+#'                  y = rnorm(n=100, mean=20, sd=5), cluster="A")
+#' df_clB = data.frame(x = rnorm(n=100, mean=100, sd=5),
+#'                 y = rnorm(n=100, mean=100, sd=5), cluster="B")
 #'
 #' clusters = rbind(df_clA, df_clB)
 #' clusters$sample="rep1"
 #'
 #' # simulate coordiantes for genes
-#' trans_info = data.frame(rbind(cbind(x_location = rnorm(n=100, mean=20,sd=5),
-#'                                 y_location = rnorm(n=100, mean=20, sd=5),
+#' trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20,sd=5),
+#'                                 y = rnorm(n=100, mean=20, sd=5),
 #'                                  feature_name="gene_A1"),
-#'                            cbind(x_location = rnorm(n=100, mean=20, sd=5),
-#'                                  y_location = rnorm(n=100, mean=20, sd=5),
+#'                            cbind(x = rnorm(n=100, mean=20, sd=5),
+#'                                  y = rnorm(n=100, mean=20, sd=5),
 #'                                  feature_name="gene_A2"),
-#'                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
-#'                                  y_location = rnorm(n=100, mean=100, sd=5),
+#'                            cbind(x = rnorm(n=100, mean=100, sd=5),
+#'                                  y = rnorm(n=100, mean=100, sd=5),
 #'                                  feature_name="gene_B1"),
-#'                            cbind(x_location = rnorm(n=100, mean=100, sd=5),
-#'                                  y_location = rnorm(n=100, mean=100, sd=5),
+#'                            cbind(x = rnorm(n=100, mean=100, sd=5),
+#'                                  y = rnorm(n=100, mean=100, sd=5),
 #'                                  feature_name="gene_B2")))
-#' trans_info$x_location=as.numeric(trans_info$x_location)
-#' trans_info$y_location=as.numeric(trans_info$y_location)
-#' w_x =  c(min(floor(min(trans_info$x_location)),
-#'          floor(min(clusters$x_centroid))),
-#'       max(ceiling(max(trans_info$x_location)),
-#'           ceiling(max(clusters$x_centroid))))
-#' w_y =  c(min(floor(min(trans_info$y_location)),
-#'           floor(min(clusters$y_centroid))),
-#'       max(ceiling(max(trans_info$y_location)),
-#'           ceiling(max(clusters$y_centroid))))
+#' trans_info$x=as.numeric(trans_info$x)
+#' trans_info$y=as.numeric(trans_info$y)
+#' w_x =  c(min(floor(min(trans_info$x)),
+#'          floor(min(clusters$x))),
+#'       max(ceiling(max(trans_info$x)),
+#'           ceiling(max(clusters$x))))
+#' w_y =  c(min(floor(min(trans_info$y)),
+#'           floor(min(clusters$y))),
+#'       max(ceiling(max(trans_info$y)),
+#'           ceiling(max(clusters$y))))
 #' data = list(trans_info = trans_info)
 #' vecs_lst = get_vectors(data_lst=list(rep1=data), cluster_info = clusters,
 #'                     bin_type = "square",
