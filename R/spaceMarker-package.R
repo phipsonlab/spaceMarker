@@ -42,8 +42,8 @@
 #' \describe{
 #'     \item{anno}{the provided cell type annotation}
 #'     \item{cluster}{cluster label}
-#'     \item{x_centroid}{x coordinates}
-#'     \item{y_centroid}{y coordiantes}
+#'     \item{x}{x coordinates}
+#'     \item{y}{y coordiantes}
 #'     \item{cells}{cell id}
 #'     \item{sample}{sample id}
 #' }
@@ -101,8 +101,8 @@
 #' \describe{
 #'     \item{anno}{the provided cell type annotation}
 #'     \item{cluster}{cluster label}
-#'     \item{x_centroid}{x coordinates}
-#'     \item{y_centroid}{y coordiantes}
+#'     \item{x}{x coordinates}
+#'     \item{y}{y coordiantes}
 #'     \item{cells}{cell id}
 #'     \item{sample}{sample id}
 #' }
