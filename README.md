@@ -8,7 +8,7 @@
 ## Introduction
 
 The spaceMarker package currently contains functions to find marker genes
-based on the spatial coordiantes for 10x Xenium technology. 
+based on the spatial coordiantes for imaging-based spatial transcriptomics technologies including 10x Xenium, NanoString CosMx and Vizgen MERSCOPE. 
 
 
 ## Installation
