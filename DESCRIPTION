@@ -12,7 +12,7 @@ Authors@R:
     )
 LazyData: FALSE
 Depends: R (>= 4.3.0)
-Imports: spatstat.geom, dplyr, glmnet, caret, foreach, stats, magrittr, data.table, Seurat, doParallel
+Imports: spatstat.geom, dplyr, glmnet, caret, foreach, stats, magrittr, data.table, Seurat, doParallel, BiocParallel
 VignetteBuilder: knitr
 Suggests: 
     BiocStyle,
@@ -37,6 +37,6 @@ License: GPL-3 + file LICENSE
 URL: https://github.com/phipsonlab/spaceMarker
 BugReports: https://github.com/phipsonlab/spaceMarker/issues
 biocViews: Spatial, GeneExpression, DifferentialExpression, StatisticalMethod, Transcriptomics
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Encoding: UTF-8
 Config/testthat/edition: 3
