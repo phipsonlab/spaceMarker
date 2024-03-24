@@ -5,14 +5,15 @@
 \title{Vectorise the spatial coordinates}
 \usage{
 get_vectors(
-    data_lst,
-    cluster_info,
-    cm_lst = NULL,
-    bin_type,
-    bin_param,
-    all_genes,
-    w_x,
-    w_y
+  data_lst,
+  cluster_info,
+  cm_lst = NULL,
+  bin_type,
+  bin_param,
+  all_genes,
+  w_x,
+  w_y,
+  n_cores = 1
 )
 }
 \arguments{
@@ -51,6 +52,10 @@ limits of enclosing box.}
 
 \item{w_y}{A numeric vector of length two specifying the y coordinate
 limits of enclosing box.}
+
+\item{n_cores}{A positive number specifying number of cores used for
+parallelizing permutation testing. Default is one core
+(sequential processing).}
 }
 \value{
 a list of two matrices with the following components

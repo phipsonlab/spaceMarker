@@ -23,6 +23,7 @@
 #' limits of enclosing box.
 #' @param w_y A numeric vector of length two specifying the y coordinate
 #' limits of enclosing box.
+#' @importFrom BiocParallel bplapply
 #' @return a matrix contains the transcript count in each grid.
 #' Each row refers to a grid, and each column refers to a gene.
 get_gene_vectors_tr<- function(data_lst, all_genes, bin_type, bin_param,
@@ -32,26 +33,38 @@ get_gene_vectors_tr<- function(data_lst, all_genes, bin_type, bin_param,
     vec_gene_mt <- as.data.frame(matrix(0, ncol=n_genes,
                                         nrow=bin_length*n_samples))
     colnames(vec_gene_mt) <- all_genes
-    for (i_gene in all_genes){
+    if (bin_type == "hexagon"){
+        w <- owin(xrange=w_x, yrange=w_y)
+        H <- hextess(W=w, bin_param[1])
+    }
+    calculate_one_gene <- function(i_gene){
         vec_gene <- c()
         for (rpp in data_lst){
             curr <- rpp$trans_info[rpp$trans_info$feature_name==i_gene,
-                                c("x","y")] %>% distinct()
+                                   c("x","y")] %>% distinct()
             gene_ppp <- ppp(curr$x,curr$y,w_x, w_y)
             # create gene vector
             if (bin_type == "hexagon"){
-                w <- owin(xrange=w_x, yrange=w_y)
-                H <- hextess(W=w, bin_param[1])
                 vec_g <- as.vector(t(quadratcount(gene_ppp, tess=H)))
-                vec_gene <- c(vec_gene, vec_g)
             }else{
                 vec_g <- as.vector(t(quadratcount(gene_ppp,
-                                    bin_param[1],bin_param[2])))
-                vec_gene <- c(vec_gene, vec_g)
+                                                  bin_param[1],bin_param[2])))
             }
+            vec_gene <- c(vec_gene, vec_g)
         }
-        vec_gene_mt[,i_gene] <- vec_gene
+        return(vec_gene)
     }
+ 
+    # to calculate all genes in parallel
+    result_lst <- bplapply(all_genes, calculate_one_gene)
+
+    # convert the list of results to a data frame
+    vec_gene_mt <- do.call(cbind, result_lst)
+    
+    # Convert to a data frame 
+    vec_gene_mt <- as.data.frame(vec_gene_mt)
+    colnames(vec_gene_mt) <- all_genes
+    
     return (vec_gene_mt)
 }
 
@@ -83,7 +96,8 @@ get_gene_vectors_tr<- function(data_lst, all_genes, bin_type, bin_param,
 #' limits of enclosing box.
 #' @param w_y A numeric vector of length two specifying the y coordinate
 #' limits of enclosing box.
-#'
+#' 
+#' @importFrom BiocParallel bplapply
 #'
 #' @return a matrix contains the transcript count in each grid.
 #' Each row refers to a grid, and each column refers to a gene.
@@ -114,26 +128,26 @@ get_gene_vectors_cm<- function(cluster_info, cm_lst, bin_type, bin_param,
     index_vec <- NULL
     # use count matrix to build gene vector matrix
     if (bin_type == "hexagon"){
-    tile_indices <- tileindex(x=cluster_info$x,
-                            y=cluster_info$y, Z=H)
-    cluster_info$index_vec  <- match(tile_indices,levels(tile_indices))
+        tile_indices <- tileindex(x=cluster_info$x,
+                                y=cluster_info$y, Z=H)
+        cluster_info$index_vec  <- match(tile_indices,levels(tile_indices))
     }else{
-    all_cell_intervals <- as.tess(quadratcount(ppp(cluster_info$x,
-                                    cluster_info$y,
-                                    w_x, w_y),
-                                    bin_param[1],bin_param[2]))
-    cluster_info$index_x <- findInterval(cluster_info$x,
-                                    all_cell_intervals$xgrid,
-                                    all.inside = TRUE, left.open=FALSE,
-                                    rightmost.closed=TRUE )
-    cluster_info$index_y <- findInterval(cluster_info$y,
-                                    all_cell_intervals$ygrid,
-                                    all.inside = TRUE, left.open=FALSE,
-                                    rightmost.closed=TRUE )
-    cluster_info$index_y  <- bin_param[2] + 1 - cluster_info$index_y
-    # column major
-    ind_vec <-(cluster_info$index_y-1)* bin_param[2] +cluster_info$index_x
-    cluster_info$index_vec <- ind_vec
+        all_cell_intervals <- as.tess(quadratcount(ppp(cluster_info$x,
+                                        cluster_info$y,
+                                        w_x, w_y),
+                                        bin_param[1],bin_param[2]))
+        cluster_info$index_x <- findInterval(cluster_info$x,
+                                        all_cell_intervals$xgrid,
+                                        all.inside = TRUE, left.open=FALSE,
+                                        rightmost.closed=TRUE )
+        cluster_info$index_y <- findInterval(cluster_info$y,
+                                        all_cell_intervals$ygrid,
+                                        all.inside = TRUE, left.open=FALSE,
+                                        rightmost.closed=TRUE )
+        cluster_info$index_y  <- bin_param[2] + 1 - cluster_info$index_y
+        # column major
+        ind_vec <-(cluster_info$index_y-1)* bin_param[2]+cluster_info$index_x
+        cluster_info$index_vec <- ind_vec
     }
     n_samples <- length(cm_lst)
     # create gene vector
@@ -141,22 +155,32 @@ get_gene_vectors_cm<- function(cluster_info, cm_lst, bin_type, bin_param,
                             nrow=bin_length*n_samples))
     colnames(vec_gene_mt) <- all_genes
     count_value <- NULL
-    for (i_gene in all_genes){
+    
+    calculate_one_gene <- function(i_gene){
         vec_gene <- c()
         for (rp_nm in names(cm_lst)){
-        cm <- cm_lst[[rp_nm]]
-        vec_g <- rep(0, bin_length)
-        i_gene_mt <- cluster_info[cluster_info$sample==rp_nm, ]
-        i_gene_mt$count_value <- as.numeric(cm[i_gene,i_gene_mt$cell_id])
-        i_gene_mt$index_vec <- factor(i_gene_mt$index_vec )
-        added_count <- i_gene_mt %>% group_by(index_vec) %>%
-        summarise(sum_ct = sum(count_value)) %>% data.frame
-        added_count$index_vec<-as.numeric(as.character((added_count$index_vec)))
-        vec_g[added_count[,"index_vec"]] <- added_count[,"sum_ct"]
-        vec_gene <- c(vec_gene, vec_g)
+            cm <- cm_lst[[rp_nm]]
+            vec_g <- rep(0, bin_length)
+            i_gene_mt <- cluster_info[cluster_info$sample==rp_nm, ]
+            i_gene_mt$count_value <- as.numeric(cm[i_gene,i_gene_mt$cell_id])
+            i_gene_mt$index_vec <- factor(i_gene_mt$index_vec )
+            added_count <- i_gene_mt %>% group_by(index_vec) %>%
+                summarise(sum_ct = sum(count_value)) %>% data.frame
+            added_count$index_vec<-as.numeric(as.character((added_count$index_vec)))
+            vec_g[added_count[,"index_vec"]] <- added_count[,"sum_ct"]
+            vec_gene <- c(vec_gene, vec_g)
+        }
+        return(vec_gene)
     }
-    vec_gene_mt[,i_gene] <- vec_gene
-    }
+    
+    # calculate all genes in parallel
+    result_lst <- bplapply(all_genes, calculate_one_gene)
+    
+    # Convert the list of results to a data frame
+    vec_gene_mt <- do.call(cbind, result_lst)
+    vec_gene_mt <- as.data.frame(vec_gene_mt)
+    colnames(vec_gene_mt) <- all_genes
+    
     return (vec_gene_mt)
 }
 
@@ -329,8 +353,9 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #' limits of enclosing box.
 #' @param w_y A numeric vector of length two specifying the y coordinate
 #' limits of enclosing box.
-#'
-#'
+#' @param n_cores A positive number specifying number of cores used for
+#' parallelizing permutation testing. Default is one core
+#' (sequential processing).
 #' @return a list of two matrices with the following components
 #' \item{\code{gene_mt}  }{contains the transcript count in each grid.
 #' Each row refers to a grid, and each column refers to a gene.}
@@ -344,6 +369,9 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #' @importFrom dplyr distinct
 #' @importFrom stats model.matrix
 #' @importFrom magrittr "%>%"
+#' @importFrom BiocParallel bplapply
+#' @importFrom BiocParallel register
+#' @importFrom BiocParallel SnowParam
 #' @export
 #' @examples
 #' # simulate coordiantes for genes
@@ -394,7 +422,7 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #'
 #'
 get_vectors<- function(data_lst, cluster_info,cm_lst=NULL, bin_type, bin_param,
-                        all_genes, w_x, w_y){
+                        all_genes, w_x, w_y, n_cores=1){
     # check input
     if ((is.null(data_lst) ==TRUE) & (is.null(cluster_info) == TRUE)){
         stop("Invalid input, no coordinates information is specified")
@@ -435,6 +463,10 @@ get_vectors<- function(data_lst, cluster_info,cm_lst=NULL, bin_type, bin_param,
     }
     bin_length<-check_binning(bin_param=bin_param,bin_type=bin_type,
                         w_x=w_x,w_y=w_y)
+    
+    # register for BiocParallel 
+    register(SnowParam(workers = n_cores, type = "SOCK"))
+    
     # with cluster information
     if (is.null(cluster_info) == FALSE){
         vec_cluster <- get_cluster_vectors(cluster_info=cluster_info,

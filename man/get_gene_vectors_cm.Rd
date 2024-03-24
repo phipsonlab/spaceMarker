@@ -5,13 +5,13 @@
 \title{Create spatial vectors for genes from count matrix and cell coordinates}
 \usage{
 get_gene_vectors_cm(
-    cluster_info,
-    cm_lst,
-    bin_type,
-    bin_param,
-    all_genes,
-    w_x,
-    w_y
+  cluster_info,
+  cm_lst,
+  bin_type,
+  bin_param,
+  all_genes,
+  w_x,
+  w_y
 )
 }
 \arguments{

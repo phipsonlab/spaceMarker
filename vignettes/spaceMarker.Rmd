@@ -49,49 +49,105 @@ library(spatstat)
 # Load data 
 ```{r load subsection of rep1}
 data(rep1_sub, rep1_clusters, rep1_neg)
-rep1_clusters$cluster=factor(rep1_clusters$cluster,
-                                levels=paste("c",1:8, sep=""))
-table(rep1_clusters$cluster)
+rep1_clusters$cluster=factor(rep1_clusters$cluster,levels=paste("c",1:8, sep=""))
 ```
-If you have a Seurat object, you can build the required object as follows 
-instead of using the `get_data` function. The defined example_vectors_cm/
-example_vectors_tr can be passed to `lasso_markers` to identify marker genes. 
+The requried input data structure for the main function `lasso_markers()` 
+is a list of matrices. For loading the 10x Xenium data, the function
+`get_data()` can be used. If you are working with Merscope or CosMx data, 
+the following code can be used for constructing the required data structure. 
+
 ### merscope  
-```{r eval=FALSE}
+The cosntructed merscope_data can be used in function `get_vectors()`.
+The defined nc_lst can be used in function` create_genesets()`. 
+```{r merscope example, eval=FALSE}
 # count matrix
 # rows as genes and columns as cells
 # gene name as row names 
-cm = ""
-transcript_df = read.csv("/transcripts.csv")
-tr_req_cols = c("x","y","feature_name","cell_id")
+data_p = "path/to/merscope/output/data/"
+cm = qread("./counts.qs")
+# cell label and coordinates 
+clusters_info =  read.csv("./cells_meta.csv")
 
+# -----------------------------------------------------------------------------
+# if transcript coordinates are available, need to repeat for each sample
+# load transcript data, transcripts must contain follwing columns 
+# - "x": x coordinate
+# - "y": y coordinate 
+# - "feature_name": gene name 
+tr_req_cols = c("x", "y", "feature_name")
+transcript_df =  read.csv("./transcripts.csv")
 merscope_data = list(cm = cm, trans_info = transcript_df[,req_cols])
+# the defined merscope_data can be used in function get_vectors() 
+
+# the cluster label, sample label and coordinates for each cell 
+cl_req_cols = c("x","y","cluster","sample")
+clusters_df = clusters_info[,cl_req_cols]
+
+# -----------------------------------------------------------------------------
+# define negative control objects if available, need to repeat for each sample
+# load coordinates for each detection, must contain following columns 
+# - "x": x coordinate
+# - "y": y coordinate 
+# - "target": negative control names 
+# - "sample": sample label 
+nc_coords = read.csv("./negative_controls_detections.csv")
+nc_names = unique(nc_coords$feature_name)
+kpt_cols = c("x","y","feature_name","sample")
+nc_lst = list(trans_info = nc_coords[,kpt_cols])
+
+
+
+```
+
+### CosMx
+The constructed cosmx_data can be used in function `get_vectors()`.
+The defined nc_lst can be used in function` create_genesets()`. 
+```{r cosmx example, eval=FALSE}
+tiledbURI <- "file/path/to/TileDB/array/on/local/machine"
+
+# read in SOMACollection
+tiledb_scdataset <- tiledbsc::SOMACollection$new(uri = tiledbURI, verbose = FALSE)
+cm <- tiledb_scdataset$somas$RNA$X$members$counts$to_matrix(batch_mode = TRUE)
+
+# the cluster label, sample label and coordinates for each cell 
+clusters_info <- tiledb_scdataset$somas$RNA$obs$to_dataframe()
+
+# -----------------------------------------------------------------------------
+# if transcript coordinates are available, need to repeat for each sample
+# load transcript data, transcripts must contain follwing columns 
+# - "x": x coordinate
+# - "y": y coordinate 
+# - "feature_name": gene name 
+req_cols = c("x","y","feature_name")
+cosmx_data = list(cm = cm, trans_info = transcript_df[,c(req_cols)])
+# 
 
 # clusters and cell locations 
 cl_req_cols = c("x","y","cluster","sample")
-clusters_df = ""
-# -----------------------------------------------
+clusters_df = clusters_info[,cl_req_cols]
+
+# -----------------------------------------------------------------------------
 # if available
-# define negative control objects 
+# define negative control objects if available
+# need to repeat for each background category and each sample
+# load coordinates for each detection, must contain follwing columns 
+# - "x": x coordinate
+# - "y": y coordinate 
+# - "target": negative control names 
+# - "sample": sample label 
+nc_coords = read.csv("./negative_controls_detections.csv")
+nc_names = unique(nc_coords$feature_name)
+kpt_cols = c("x","y","feature_name","sample")
+nc_lst = list(trans_info = nc_coords[,kpt_cols])
+# 
+
+
+
 ```
 
-### cosmx 
-```{r eval=FALSE}
-tiledbURI <- ""
-
-# read in SOMACollection
-tiledb_scdataset <- tiledbsc::SOMACollection$new(uri = tiledbURI, 
-                                                 verbose = FALSE)
-cm <- tiledb_scdataset$somas$RNA$X$members$counts$to_matrix(batch_mode = TRUE)
-
-req_cols = c("x","y","feature_name","cell_id")
-cosmx_data = list(cm = cm, trans_info = transcript_df[,c(req_cols)])
-# -----------------------------------------------
-# if available
-# define negative control objects 
-
-```
-
+If you have a Seurat object, you can build the required object as follows 
+instead of using the `get_data` function. The defined example_vectors_cm/
+example_vectors_tr can be passed to `lasso_markers` to identify marker genes. 
 ## from a Seurat object 
 ```{r eval=FALSE}
 seu_obj =Seurat::CreateSeuratObject(counts = rep1_sub$cm)
@@ -104,14 +160,10 @@ transcript_coords = rep1_sub$trans_info
 data_example = list(cm=seu_obj@assays$RNA$counts,
                     trans_info =transcript_coords)
 
-w_x =  c(min(floor(min(data$trans_info$x)),
-            floor(min(clusters_info$x))), 
-        max(ceiling(max(data$trans_info$x)),
-            ceiling(max(clusters_info$x))))
-w_y =  c(min(floor(min(data$trans_info$y)),
-            floor(min(clusters_info$y))), 
-        max(ceiling(max(data$trans_info$y)),
-            ceiling(max(clusters_info$y))))
+w_x =  c(min(floor(min(data$trans_info$x)), floor(min(clusters_info$x))), 
+        max(ceiling(max(data$trans_info$x)), ceiling(max(clusters_info$x))))
+w_y =  c(min(floor(min(data$trans_info$y)), floor(min(clusters_info$y))), 
+        max(ceiling(max(data$trans_info$y)), ceiling(max(clusters_info$y))))
 
 # build spatial vectors from transcript coordinates and cluster coordinates 
 example_vectors_tr = get_vectors(data_lst= list(data_example),
@@ -120,18 +172,18 @@ example_vectors_tr = get_vectors(data_lst= list(data_example),
                                 bin_param=c(10,10), 
                                 all_genes = row.names(data_example$cm), 
                                 w_x=w_x, w_y=w_y)
-
+# -----------------------------------------------------------------------------
 # build spatial vectors from count matrix and cluster coordinates 
 # make sure the cluster information contains column names: 
-# cluster, x, ys, sample and cell_id
+# cluster, x, y, sample and cell_id
 colnames(clusters_info)[5] = "cell_id"
 example_vectors_cm = get_vectors(data_lst= NULL,
-                            cm_lst=list(rep1=seu_obj@assays$RNA$counts),
-                            cluster_info = clusters_info,
-                            bin_type="square",
-                            bin_param=c(10,10), 
-                            all_genes = row.names(data_example$cm), 
-                            w_x=w_x, w_y=w_y)
+                                cm_lst=list(rep1=seu_obj@assays$RNA$counts),
+                                cluster_info = clusters_info,
+                                bin_type="square",
+                                bin_param=c(10,10), 
+                                all_genes = row.names(data_example$cm), 
+                                w_x=w_x, w_y=w_y)
 
 ```
 
