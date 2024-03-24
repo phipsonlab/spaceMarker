@@ -243,3 +243,38 @@ test_that("Test can vectorise genes and clusters - output mathces", {
                                                      1,0, 0, 1,
                                                      2, 0, 0, 5))
 })
+#############################################################################
+# simulate coordiantes for genes with 3 cores 
+trans = as.data.frame(rbind(cbind(x = c(1,2,20,21,22,23,24),
+                                  y = c(23, 24, 1,2,3,4,5),
+                                  feature_name="A"),
+                            cbind(x = c(1,20),
+                                  y = c(15, 10),
+                                  feature_name="B"),
+                            cbind(x = c(1,2,20,21,22,23,24),
+                                  y = c(23, 24, 1,2,3,4,5),
+                                  feature_name="C")))
+
+trans$x = as.numeric(trans$x)
+trans$y = as.numeric(trans$y)
+clusters = data.frame(x = c(3, 5,11,21,2,23,19),
+                      y = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
+clusters$sample="rep1"
+
+data=list(trans_info=trans)
+w_x=c(0,25)
+w_y=c(0,25)
+vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
+                            cluster_info = clusters,
+                            bin_type = "square",
+                            bin_param = c(2,2),
+                            all_genes = c("A","B","C"),
+                            w_x = w_x, w_y=w_y,n_cores = 3 )
+
+
+test_that("Test can vectorise genes and clusters - output mathces", {
+    expect_equal(as.vector(vecs_lst_gene$cluster_mt), c(2,0,2,3))
+    expect_equal(as.vector(vecs_lst_gene$gene_mt), c(2, 0, 0 ,5 ,
+                                                     1,0, 0, 1,
+                                                     2, 0, 0, 5))
+})
