@@ -5,15 +5,15 @@
 \title{Vectorise the spatial coordinates}
 \usage{
 get_vectors(
-  data_lst,
-  cluster_info,
-  cm_lst = NULL,
-  bin_type,
-  bin_param,
-  all_genes,
-  w_x,
-  w_y,
-  n_cores = 1
+    data_lst,
+    cluster_info,
+    cm_lst = NULL,
+    bin_type,
+    bin_param,
+    all_genes,
+    w_x,
+    w_y,
+    n_cores = 1
 )
 }
 \arguments{
@@ -97,18 +97,18 @@ based on \code{data_lst}.
 \examples{
 # simulate coordiantes for genes
 trans = as.data.frame(rbind(cbind(x = c(1,2,20,21,22,23,24),
-                                 y = c(23, 24, 1,2,3,4,5),
-                                 feature_name="A"),
-                         cbind(x = c(1,20),
-                               y = c(15, 10),
-                               feature_name="B"),
-                         cbind(x = c(1,2,20,21,22,23,24),
-                               y = c(23, 24, 1,2,3,4,5),
-                               feature_name="C")))
+                                    y = c(23, 24, 1,2,3,4,5),
+                                    feature_name="A"),
+                            cbind(x = c(1,20),
+                                    y = c(15, 10),
+                                    feature_name="B"),
+                            cbind(x = c(1,2,20,21,22,23,24),
+                                    y = c(23, 24, 1,2,3,4,5),
+                                    feature_name="C")))
 trans$x = as.numeric(trans$x)
 trans$y = as.numeric(trans$y)
 clusters = data.frame(x = c(3, 5,11,21,2,23,19),
-                    y = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
+                        y = c(20, 24, 1,2,3,4,5), cluster="cluster_1")
 clusters$sample="rep1"
 data=list(trans_info=trans)
 vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
@@ -121,9 +121,9 @@ vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
 
 # generate gene vector from count matrix
 cm <- data.frame(rbind("gene_A"=c(0,0,2,0,0,0,2),
-                     "gene_B"=c(5,3,3,13,0,1,14),
-                     "gene_C"=c(5,0,1,5,1,0,7),
-                     "gene_D"=c(0,1,1,2,0,0,2)))
+                        "gene_B"=c(5,3,3,13,0,1,14),
+                        "gene_C"=c(5,0,1,5,1,0,7),
+                        "gene_D"=c(0,1,1,2,0,0,2)))
 colnames(cm)= paste("cell_", 1:7, sep="")
 # simulate coordiantes for clusters
 clusters = data.frame(x = c(1, 2,20,21,22,23,24),
