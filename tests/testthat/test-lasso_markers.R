@@ -101,6 +101,31 @@ test_that("Return error when some genes have zero variance", {
                   coef_cutoff=0.05,
                   background=NULL))
 })
+
 ########################################################################
 
+# test the randomness in cv for lasso
+set.seed(989)
+seed_lst = sample(1:9999, size = 100, replace = FALSE)
+all_res = as.data.frame(matrix(0, nrow = 4*length(seed_lst), ncol = 6))
+colnames(all_res)= c("gene","top_cluster","glm_coef","pearson","max_gg_corr","max_gc_corr")
 
+for (curr_id in 1:length(seed_lst)){
+    sed = seed_lst[curr_id]
+    set.seed(sed)
+    curr_res = lasso_markers(gene_mt=vecs_lst$gene_mt,
+                               cluster_mt = vecs_lst$cluster_mt,
+                               sample_names=c("rep1"),
+                               keep_positive=TRUE,
+                               coef_cutoff=0.05,
+                               background=NULL)
+    all_res[(4*(curr_id-1)+1):(curr_id*4), ] = curr_res$lasso_top_result
+    
+}
+
+test_that("lasso cross validation penalty - randomness", {
+    expect_equal(unique(all_res[all_res$gene == "gene_A1", "top_cluster"]), "A")
+    expect_equal(unique(all_res[all_res$gene == "gene_A2", "top_cluster"]), "A")
+    expect_equal(unique(all_res[all_res$gene == "gene_B1", "top_cluster"]), "B")
+    expect_equal(unique(all_res[all_res$gene == "gene_B2", "top_cluster"]), "B")
+})

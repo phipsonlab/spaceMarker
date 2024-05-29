@@ -278,3 +278,47 @@ test_that("Test can vectorise genes and clusters - output mathces", {
                                                      1,0, 0, 1,
                                                      2, 0, 0, 5))
 })
+
+#############################################################################
+# simulate coordiantes for genes with 3 cores 
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate 100 feature names
+feature_names <- paste("gene", 1:200, sep="")
+
+# Function to generate random coordinates for a given gene
+generate_coords <- function(feature_name) {
+    # Random number of coordinates between 100 and 10000
+    n_coords <- sample(5000:10000, 1)
+    
+    # Generate random x and y coordinates
+    x_coords <- runif(n_coords, min=0, max=10000)
+    y_coords <- runif(n_coords, min=0, max=10000)
+    
+    # Create a data frame
+    data.frame(x = x_coords, y = y_coords, feature_name = rep(feature_name, n_coords))
+}
+
+# Apply the function to each feature name and combine results
+coords_data <- do.call(rbind, lapply(feature_names, generate_coords))
+
+head(coords_data)
+
+vector_lst_1core = get_vectors(data_lst= list(sample1 = list(trans_info=coords_data)),
+                                cluster_info = NULL,
+                                bin_type="square",
+                                bin_param=c(50,50),
+                                all_genes = feature_names,
+                                w_x=c(0,10000), w_y=c(0,10000), n_cores = 1)
+
+vector_lst_5core = get_vectors(data_lst= list(sample1 =list(trans_info=coords_data)),
+                               cluster_info = clusters_info,
+                               bin_type="square",
+                               bin_param=c(50,50),
+                               all_genes = feature_names,
+                               w_x=c(0,10000), w_y=c(0,10000), n_cores = 5)
+test_that("Test can result from sequential matches with result from parallel", {
+    expect_equal(as.vector(vector_lst_1core$gene_mt), as.vector(vector_lst_5core$gene_mt))
+
+})
