@@ -31,20 +31,20 @@
 #' \item{\code{gene_mt}  }{ contains the transcript count in each grid.
 #' Each row refers to a grid, and each column refers to a gene.}
 compute_observation<- function(data, cluster_info,
-                               correlation_method = "pearson",
-                               all_genes=all_genes,
-                               bin_type, bin_param, w_x, w_y){
-  vectors_lst <- get_vectors(data_lst=list(data),
-                             cluster_info = cluster_info,
-                             bin_type=bin_type,
-                             bin_param=bin_param,
-                             all_genes=all_genes,
-                             w_x=w_x, w_y=w_y)
+                                correlation_method = "pearson",
+                                all_genes=all_genes,
+                                bin_type, bin_param, w_x, w_y){
+    vectors_lst <- get_vectors(data_lst=list(data),
+                                cluster_info = cluster_info,
+                                bin_type=bin_type,
+                                bin_param=bin_param,
+                                all_genes=all_genes,
+                                w_x=w_x, w_y=w_y)
 
-  # calculate correation of permuted clusters and gene
-  obs.stat <- cor(x=vectors_lst$gene_mt, y=vectors_lst$cluster_mt,
-                  method=correlation_method)
-  return (list(obs.stat = obs.stat, gene_mt=vectors_lst$gene_mt))
+    # calculate correation of permuted clusters and gene
+    obs.stat <- cor(x=vectors_lst$gene_mt, y=vectors_lst$cluster_mt,
+                        method=correlation_method)
+    return (list(obs.stat = obs.stat, gene_mt=vectors_lst$gene_mt))
 }
 
 #' Compute permutation statistics for permutation framework
@@ -81,78 +81,75 @@ compute_observation<- function(data, cluster_info,
 #' @return A matrix with permutation statistics
 #'
 compute_permutation<- function(cluster_info, perm.size = 1000,
-                               correlation_method = "pearson",  bin_type,
-                               bin_param, n.cores=1, w_x,w_y, gene_mt,
-                               cluster_names){
-  #tic(paste(perm.size, "permutation total time"))
-  n_clusters <- length(unique(cluster_info$cluster))
-
-  t.perm.array<- array(0, dim = c(ncol(gene_mt),
-                                  length(cluster_names),perm.size))
-
-  if (bin_type == "hexagon"){
-    if (length(bin_param) != 1){
-      stop("Invalid input bin_param, bin_param should be a
-                vector of length 2 for hexagon bins")
-    }
-
-    w <-owin(xrange=w_x, yrange=w_y)
-    H <-hextess(W=w, bin_param[1])
-    bin_length <- length(H$tiles)
-  }else if (bin_type == "square" | bin_type == "rectangle"){
+                                correlation_method = "pearson",  bin_type,
+                                bin_param, n.cores=1, w_x,w_y, gene_mt,
+                                cluster_names){
+    #tic(paste(perm.size, "permutation total time"))
+    n_clusters <- length(unique(cluster_info$cluster))
+    t.perm.array<- array(0, dim = c(ncol(gene_mt),
+                            length(cluster_names),perm.size))
+    
+    if (bin_type == "hexagon"){
+        if (length(bin_param) != 1){
+            stop("Invalid input bin_param, bin_param should be a
+                    vector of length 2 for hexagon bins")
+        }
+        w <-owin(xrange=w_x, yrange=w_y)
+        H <-hextess(W=w, bin_param[1])
+        bin_length <- length(H$tiles)
+    }else if (bin_type == "square" | bin_type == "rectangle"){
     if (length(bin_param) != 2){
-      stop("Invalid input bin_param, bin_param should be
-            a vector of length 2 for rectangle/square bins")
+        stop("Invalid input bin_param, bin_param should be
+                a vector of length 2 for rectangle/square bins")
     }
     bin_length <- bin_param[1] * bin_param[2]
-  }else{
-    stop("Input bin_type is not supported.
-        Supported bin_type is rectangle/square or hexagon.")
-  }
-
-  my.cluster <- parallel::makeCluster(
-    n.cores,
-    type = "PSOCK"
-  )
-  doParallel::registerDoParallel(cl = my.cluster)
-  #set.seed(seed_value)
-  #sds<- sample(seq_len(200000), size= perm.size, replace = FALSE)
-  i <- NULL
-  t.perm.array<-foreach (i = seq_len(perm.size)) %dopar% {
-    cell_cluster <- cluster_info
-    # permutate the cluster labels
-    #set.seed(sds[i])
-    cell_cluster$cluster <- sample(cell_cluster$cluster,
-                                   size = length(cell_cluster$cluster),
-                                   replace = FALSE)
-
-    cluster_mt <- matrix(0, ncol=length(cluster_names), nrow=bin_length)
-    colnames(cluster_mt) <- cluster_names
-    # a matrix of cluster vector, each column as a vector for a cluster
-    for (i_cluster in cluster_names){
-      x_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "x"]
-      y_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "y"]
-      cluster_ppp <- spatstat.geom::ppp(x_loc,y_loc,w_x, w_y)
-      if (bin_type == "hexagon"){
-        cm_cluster <- spatstat.geom::quadratcount(cluster_ppp, tess=H)
-      }else{
-        cm_cluster <- spatstat.geom::quadratcount(cluster_ppp, bin_param[1],
-                                                  bin_param[2])
-      }
-
-      cluster_mt[,i_cluster] <- as.vector(t(cm_cluster))
+    }else{
+        stop("Input bin_type is not supported.
+                Supported bin_type is rectangle/square or hexagon.")
     }
-
-    # calculate correlation of permuted clusters and gene
-    perm.stat <- cor(x=gene_mt, y=cluster_mt, method=correlation_method)
-
-    t.perm.array[,,i]<- perm.stat
-  }
-
-  perm.array<- simplify2array(t.perm.array)
-  parallel::stopCluster(cl = my.cluster)
-
-  return (list(t.perm = perm.array))
+    
+    my.cluster <- parallel::makeCluster(
+        n.cores,
+        type = "PSOCK"
+    )
+    doParallel::registerDoParallel(cl = my.cluster)
+    #set.seed(seed_value)
+    #sds<- sample(seq_len(200000), size= perm.size, replace = FALSE)
+    i <- NULL
+    t.perm.array<-foreach (i = seq_len(perm.size)) %dopar% {
+        cell_cluster <- cluster_info
+        # permutate the cluster labels
+        #set.seed(sds[i])
+        cell_cluster$cluster <- sample(cell_cluster$cluster,
+                                        size = length(cell_cluster$cluster),
+                                        replace = FALSE)
+        
+        cluster_mt <- matrix(0, ncol=length(cluster_names), nrow=bin_length)
+        colnames(cluster_mt) <- cluster_names
+        # a matrix of cluster vector, each column as a vector for a cluster
+        for (i_cluster in cluster_names){
+            x_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "x"]
+            y_loc <- cell_cluster[cell_cluster$cluster==i_cluster, "y"]
+            cluster_ppp <- spatstat.geom::ppp(x_loc,y_loc,w_x, w_y)
+            if (bin_type == "hexagon"){
+                cm_cluster <- spatstat.geom::quadratcount(cluster_ppp, tess=H)
+            }else{
+                cm_cluster <- spatstat.geom::quadratcount(cluster_ppp, 
+                                                        bin_param[1],
+                                                        bin_param[2])
+            }
+            cluster_mt[,i_cluster] <- as.vector(t(cm_cluster))
+        }
+        # calculate correlation of permuted clusters and gene
+        perm.stat <- cor(x=gene_mt, y=cluster_mt, method=correlation_method)
+        
+        t.perm.array[,,i]<- perm.stat
+    }
+    
+    perm.array<- simplify2array(t.perm.array)
+    parallel::stopCluster(cl = my.cluster)
+    
+    return (list(t.perm = perm.array))
 }
 
 

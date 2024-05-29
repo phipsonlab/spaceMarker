@@ -41,20 +41,20 @@ get_gene_vectors_tr<- function(data_lst, all_genes, bin_type, bin_param,
         vec_gene <- c()
         for (rpp in data_lst){
             curr <- rpp$trans_info[rpp$trans_info$feature_name==i_gene,
-                                   c("x","y")] %>% distinct()
+                                    c("x","y")] %>% distinct()
             gene_ppp <- ppp(curr$x,curr$y,w_x, w_y)
             # create gene vector
             if (bin_type == "hexagon"){
                 vec_g <- as.vector(t(quadratcount(gene_ppp, tess=H)))
             }else{
                 vec_g <- as.vector(t(quadratcount(gene_ppp,
-                                                  bin_param[1],bin_param[2])))
+                                                bin_param[1],bin_param[2])))
             }
             vec_gene <- c(vec_gene, vec_g)
         }
         return(vec_gene)
     }
- 
+
     # to calculate all genes in parallel
     result_lst <- bplapply(all_genes, calculate_one_gene)
 
@@ -166,7 +166,8 @@ get_gene_vectors_cm<- function(cluster_info, cm_lst, bin_type, bin_param,
             i_gene_mt$index_vec <- factor(i_gene_mt$index_vec )
             added_count <- i_gene_mt %>% group_by(index_vec) %>%
                 summarise(sum_ct = sum(count_value)) %>% data.frame
-            added_count$index_vec<-as.numeric(as.character((added_count$index_vec)))
+            idx_ve <- as.numeric(as.character((added_count$index_vec)))
+            added_count$index_vec<-idx_ve
             vec_g[added_count[,"index_vec"]] <- added_count[,"sum_ct"]
             vec_gene <- c(vec_gene, vec_g)
         }
@@ -435,7 +436,7 @@ get_vectors<- function(data_lst, cluster_info,cm_lst=NULL, bin_type, bin_param,
                 for every cell")
         }
         if ((is.null(cm_lst) == FALSE)){
-            if (length(setdiff(unique(cluster_info$sample), names(cm_lst))) !=0){
+            if (length(setdiff(unique(cluster_info$sample),names(cm_lst)))!=0){
                 stop("Mismatched sample names in cluster_info and cm_lst") }
             # must contain cell id
             req_cols <- c("x","y","cluster","sample","cell_id")
