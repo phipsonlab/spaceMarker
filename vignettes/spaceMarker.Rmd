@@ -809,7 +809,7 @@ head(rep1_top_df_nc)
 ```
 
 
-### Visualise top3 marker genes for each cluster detected by linear modelling approach
+### Visualise top3 marker genes detected by linear modelling approach
 We can rank the marker genes by its linear model coefficient to the cluster
 ans plot the transcript detection coordinates for the top three marker genes
 for every cluster. 

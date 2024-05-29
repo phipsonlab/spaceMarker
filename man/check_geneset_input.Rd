@@ -8,7 +8,7 @@ check_geneset_input(data_lst, bin_type, bin_param, w_x, w_y, cluster_info)
 }
 \arguments{
 \item{data_lst}{A list of named matrices containing the coordiantes of 
-transcripts. This can be the output from the function \code{\link{get_data}}.}
+transcripts.}
 
 \item{bin_type}{A string indicating which bin shape is to be used for
 vectorization. One of "square" (default), "rectangle", or "hexagon".}

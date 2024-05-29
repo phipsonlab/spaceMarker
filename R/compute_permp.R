@@ -1,7 +1,6 @@
 #' Compute observation statistic for permutation framework
 #'
 #' @param data A list of matrices containing the coordinates of transcripts.
-#' This can be the output from the function \code{\link{get_data}}.
 #' @param cluster_info A dataframe/matrix containing the centroid
 #' coordinates and cluster label for each cell.The column names should
 #' include "x" (x coordinate), "y" (y coordinate),
@@ -168,7 +167,6 @@ compute_permutation<- function(cluster_info, perm.size = 1000,
 #' permuted correlations larger than the observation correlation.
 #'
 #' @param data A list of matrices containing the coordinates of transcripts.
-#' This can be the output from the function \code{\link{get_data}}.
 #' @param cluster_info A dataframe/matrix containing the centroid coordinates
 #' and cluster label for each cell.The column names should include "x"
 #' (x coordinate), "y" (y coordinate), and "cluster" (cluster label).

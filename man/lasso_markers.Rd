@@ -125,50 +125,48 @@ we will return "NoSig" for this gene.
 set.seed(100)
 #  simulate coordiantes for clusters
 df_clA = data.frame(x = rnorm(n=100, mean=20, sd=5),
-                 y = rnorm(n=100, mean=20, sd=5), cluster="A")
+                    y = rnorm(n=100, mean=20, sd=5), cluster="A")
 df_clB = data.frame(x = rnorm(n=100, mean=100, sd=5),
-                y = rnorm(n=100, mean=100, sd=5), cluster="B")
+                    y = rnorm(n=100, mean=100, sd=5), cluster="B")
 
 clusters = rbind(df_clA, df_clB)
 clusters$sample="rep1"
 
 # simulate coordiantes for genes
 trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20,sd=5),
-                                y = rnorm(n=100, mean=20, sd=5),
-                                 feature_name="gene_A1"),
-                           cbind(x = rnorm(n=100, mean=20, sd=5),
-                                 y = rnorm(n=100, mean=20, sd=5),
-                                 feature_name="gene_A2"),
-                           cbind(x = rnorm(n=100, mean=100, sd=5),
-                                 y = rnorm(n=100, mean=100, sd=5),
-                                 feature_name="gene_B1"),
-                           cbind(x = rnorm(n=100, mean=100, sd=5),
-                                 y = rnorm(n=100, mean=100, sd=5),
-                                 feature_name="gene_B2")))
+                                    y = rnorm(n=100, mean=20, sd=5),
+                                    feature_name="gene_A1"),
+                                cbind(x = rnorm(n=100, mean=20, sd=5),
+                                    y = rnorm(n=100, mean=20, sd=5),
+                                    feature_name="gene_A2"),
+                                cbind(x = rnorm(n=100, mean=100, sd=5),
+                                    y = rnorm(n=100, mean=100, sd=5),
+                                    feature_name="gene_B1"),
+                                cbind(x = rnorm(n=100, mean=100, sd=5),
+                                    y = rnorm(n=100, mean=100, sd=5),
+                                    feature_name="gene_B2")))
 trans_info$x=as.numeric(trans_info$x)
 trans_info$y=as.numeric(trans_info$y)
 w_x =  c(min(floor(min(trans_info$x)),
-         floor(min(clusters$x))),
-      max(ceiling(max(trans_info$x)),
-          ceiling(max(clusters$x))))
+            floor(min(clusters$x))),
+        max(ceiling(max(trans_info$x)),
+            ceiling(max(clusters$x))))
 w_y =  c(min(floor(min(trans_info$y)),
-          floor(min(clusters$y))),
-      max(ceiling(max(trans_info$y)),
-          ceiling(max(clusters$y))))
+            floor(min(clusters$y))),
+        max(ceiling(max(trans_info$y)),
+            ceiling(max(clusters$y))))
 data = list(trans_info = trans_info)
 vecs_lst = get_vectors(data_lst=list(rep1=data), cluster_info = clusters,
-                    bin_type = "square",
-                    bin_param = c(20,20),
-                    all_genes =c("gene_A1","gene_A2","gene_B1","gene_B2"),
-                    w_x = w_x, w_y=w_y)
+                        bin_type = "square",
+                        bin_param = c(20,20),
+                        all_genes =c("gene_A1","gene_A2","gene_B1","gene_B2"),
+                        w_x = w_x, w_y=w_y)
 lasso_res = lasso_markers(gene_mt=vecs_lst$gene_mt,
-                        cluster_mt = vecs_lst$cluster_mt,
-                        sample_names=c("rep1"),
-                        keep_positive=TRUE,
-                        coef_cutoff=0.05,
-                        background=NULL)
-
-
+                            cluster_mt = vecs_lst$cluster_mt,
+                            sample_names=c("rep1"),
+                            keep_positive=TRUE,
+                            coef_cutoff=0.05,
+                            background=NULL)
 }
 \seealso{
 \code{\link{get_vectors}}

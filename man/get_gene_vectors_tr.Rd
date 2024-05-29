@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_vectors.R
 \name{get_gene_vectors_tr}
 \alias{get_gene_vectors_tr}
-\title{Create spatial vectors for genes from transcript coordiantes}
+\title{Create spatial vectors for genes from transcript coordinates}
 \usage{
 get_gene_vectors_tr(
     data_lst,
@@ -17,7 +17,6 @@ get_gene_vectors_tr(
 \arguments{
 \item{data_lst}{A list of list. Every nested list refers to one sample,
 which must contain at least one matrix with transcript coordinates.
-This can be the output from the function \code{\link{get_data}}.
 Optional parameter.}
 
 \item{all_genes}{A vector of strings giving the name of the genes you want to
@@ -46,6 +45,6 @@ a matrix contains the transcript count in each grid.
 Each row refers to a grid, and each column refers to a gene.
 }
 \description{
-This function will build gene vectors based on the transcript coordiantes of
+This function will build gene vectors based on the transcript coordinates of
 every gene
 }

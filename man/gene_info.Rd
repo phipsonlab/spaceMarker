@@ -5,7 +5,7 @@
 \alias{gene_info}
 \title{Gene panel information}
 \format{
-A data frame with 313 rows and  3 variables:
+A data frame with 313 rows and 3 variables:
 \describe{
     \item{Name}{gene name}
     \item{Ensembl.ID}{id}
@@ -24,6 +24,6 @@ data(gene_info)
 data frame
 }
 \description{
-A csv file containing the information for the gene panle
+A csv file containing the information for the gene panel
 }
 \keyword{datasets}

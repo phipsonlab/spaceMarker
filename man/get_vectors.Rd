@@ -19,7 +19,6 @@ get_vectors(
 \arguments{
 \item{data_lst}{A list of list. Every nested list refers to one sample,
 which must contain at least one matrix with transcript coordinates.
-This can be the output from the function \code{\link{get_data}}.
 Optional parameter.}
 
 \item{cluster_info}{A dataframe/matrix containing the centroid coordinates,
@@ -97,14 +96,14 @@ based on \code{data_lst}.
 \examples{
 # simulate coordiantes for genes
 trans = as.data.frame(rbind(cbind(x = c(1,2,20,21,22,23,24),
-                                    y = c(23, 24, 1,2,3,4,5),
-                                    feature_name="A"),
+                                y = c(23, 24, 1,2,3,4,5),
+                                feature_name="A"),
                             cbind(x = c(1,20),
-                                    y = c(15, 10),
-                                    feature_name="B"),
+                                y = c(15, 10),
+                                feature_name="B"),
                             cbind(x = c(1,2,20,21,22,23,24),
-                                    y = c(23, 24, 1,2,3,4,5),
-                                    feature_name="C")))
+                                y = c(23, 24, 1,2,3,4,5),
+                                feature_name="C")))
 trans$x = as.numeric(trans$x)
 trans$y = as.numeric(trans$y)
 clusters = data.frame(x = c(3, 5,11,21,2,23,19),
@@ -127,7 +126,7 @@ cm <- data.frame(rbind("gene_A"=c(0,0,2,0,0,0,2),
 colnames(cm)= paste("cell_", 1:7, sep="")
 # simulate coordiantes for clusters
 clusters = data.frame(x = c(1, 2,20,21,22,23,24),
-            y = c(23, 24, 1,2,3,4,5), cluster="A")
+                        y = c(23, 24, 1,2,3,4,5), cluster="A")
 clusters$sample="rep1"
 clusters$cell_id= colnames(cm)
 vecs_lst = get_vectors(data_lst= NULL, cluster_info = clusters,
@@ -136,8 +135,4 @@ vecs_lst = get_vectors(data_lst= NULL, cluster_info = clusters,
                         bin_param = c(2,2),
                         all_genes = row.names(cm),
                         w_x = c(0,25), w_y=c(0,25))
-
-}
-\seealso{
-\code{\link{get_data}}
 }

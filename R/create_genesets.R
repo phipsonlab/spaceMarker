@@ -1,7 +1,7 @@
 #' helper function to check the inputs passed to create geneset function
 #' 
 #' @param data_lst A list of named matrices containing the coordiantes of 
-#' transcripts. This can be the output from the function \code{\link{get_data}}.
+#' transcripts.
 #' @param bin_type A string indicating which bin shape is to be used for
 #' vectorization. One of "square" (default), "rectangle", or "hexagon".
 #' @param bin_param A numeric vector indicating the size of the bin. If the
@@ -79,8 +79,8 @@ check_geneset_input <- function(data_lst, bin_type, bin_param,
 
 #' Convert the coordinates of set of genes into vectors.
 #'
-#' @param data_lst A list of named matrices containing the coordiantes of 
-#' transcripts. This can be the output from the function \code{\link{get_data}}.
+#' @param data_lst A list of named matrices containing the coordinates of 
+#' transcripts.
 #' @param name_lst A named list of strings giving the name of features that are
 #' treated as background.
 #' @param bin_type A string indicating which bin shape is to be used for
@@ -128,7 +128,7 @@ check_geneset_input <- function(data_lst, bin_type, bin_param,
 #'                            w_x=c(0,25), w_y=c(0,25))
 #'
 create_genesets<-function(data_lst, name_lst, bin_type="square",
-                            bin_param=c(40,40), w_x=w_x, w_y=w_y,
+                            bin_param, w_x=w_x, w_y=w_y,
                             cluster_info){
     
     input_info <- check_geneset_input(data_lst=data_lst, bin_type=bin_type, 

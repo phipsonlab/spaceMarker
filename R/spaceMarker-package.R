@@ -1,8 +1,8 @@
 #' Gene panel information
 #'
-#' A csv file containing the information for the gene panle
+#' A csv file containing the information for the gene panel
 #'
-#' @format A data frame with 313 rows and  3 variables:
+#' @format A data frame with 313 rows and 3 variables:
 #' \describe{
 #'     \item{Name}{gene name}
 #'     \item{Ensembl.ID}{id}
@@ -17,12 +17,12 @@
 
 #' A small section of Xenium human breast cancer rep1.
 #'
-#' A list of named matrices generated from get_data()
+#' A list of named matrices
 #'
-#' @format A list of named matrices generated from get_data():
+#' @format A list of named matrices:
 #' \describe{
 #'     \item{cm}{the count matrix}
-#'     \item{trans_info}{a data frame containing the coordiantes for 
+#'     \item{trans_info}{a data frame containing the coordinates for 
 #'                      every transcript}
 #' }
 #' @usage data(rep1_sub)
@@ -56,12 +56,12 @@
 
 #' Rep1 negative control genes within the selected region.
 #'
-#' A list of named matrices generated from get_data()
+#' A list of named matrices
 #'
-#' @format A list of named matrices generated from get_data():
+#' @format A list of named matrices 
 #' \describe{
 #'     \item{cm}{the count matrix for negative control genes}
-#'     \item{trans_info}{a data frame containing the coordiantes 
+#'     \item{trans_info}{a data frame containing the coordinates 
 #'                          for every transcript}
 #'     \item{probe}{names of negative control probe genes}
 #'     \item{codeword}{names of negative control codeword genes}
@@ -76,9 +76,9 @@
 
 #' A small section of Xenium human breast cancer rep2.
 #'
-#' A list of named matrices generated from get_data()
+#' A list of named matrices
 #'
-#' @format A list of named matrices generated from get_data():
+#' @format A list of named matrices 
 #' \describe{
 #'     \item{cm}{the count matrix}
 #'     \item{trans_info}{a data frame containing the coordiantes 
@@ -115,12 +115,12 @@
 
 #' Rep2 negative control genes within the selected region.
 #'
-#' A list of named matrices generated from get_data()
+#' A list of named matrices 
 #'
-#' @format A list of named matrices generated from get_data():
+#' @format A list of named matrices:
 #' \describe{
 #'     \item{cm}{the count matrix for negative control genes}
-#'     \item{trans_info}{a data frame containing the coordiantes for 
+#'     \item{trans_info}{a data frame containing the coordinates for 
 #'                      every transcript}
 #'     \item{probe}{names of negative control probe genes}
 #'     \item{codeword}{names of negative control codeword genes}

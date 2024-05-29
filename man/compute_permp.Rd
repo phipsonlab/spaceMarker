@@ -19,8 +19,7 @@ compute_permp(
 )
 }
 \arguments{
-\item{data}{A list of matrices containing the coordinates of transcripts.
-This can be the output from the function \code{\link{get_data}}.}
+\item{data}{A list of matrices containing the coordinates of transcripts.}
 
 \item{cluster_info}{A dataframe/matrix containing the centroid coordinates
 and cluster label for each cell.The column names should include "x"
@@ -97,16 +96,16 @@ clusters$sample="rep1"
 # simulate coordiantes for genes
 trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20, sd=5),
                                     y = rnorm(n=100, mean=20, sd=5),
-                                 feature_name="gene_A1"),
-                           cbind(x = rnorm(n=100, mean=20, sd=5),
-                                 y = rnorm(n=100, mean=20, sd=5),
-                                 feature_name="gene_A2"),
-                           cbind(x = rnorm(n=100, mean=100, sd=5),
-                                 y = rnorm(n=100, mean=100, sd=5),
-                                 feature_name="gene_B1"),
-                           cbind(x = rnorm(n=100, mean=100, sd=5),
-                                 y = rnorm(n=100, mean=100, sd=5),
-                                 feature_name="gene_B2")))
+                                    feature_name="gene_A1"),
+                                cbind(x = rnorm(n=100, mean=20, sd=5),
+                                    y = rnorm(n=100, mean=20, sd=5),
+                                    feature_name="gene_A2"),
+                                cbind(x = rnorm(n=100, mean=100, sd=5),
+                                    y = rnorm(n=100, mean=100, sd=5),
+                                    feature_name="gene_B1"),
+                                cbind(x = rnorm(n=100, mean=100, sd=5),
+                                    y = rnorm(n=100, mean=100, sd=5),
+                                    feature_name="gene_B2")))
 trans_info$x=as.numeric(trans_info$x)
 trans_info$y=as.numeric(trans_info$y)
 w_x =  c(min(floor(min(trans_info$x)),
@@ -114,20 +113,20 @@ w_x =  c(min(floor(min(trans_info$x)),
         max(ceiling(max(trans_info$x)),
             ceiling(max(clusters$x))))
 w_y =  c(min(floor(min(trans_info$y)),
-         floor(min(clusters$y))),
+            floor(min(clusters$y))),
       max(ceiling(max(trans_info$y)),
-          ceiling(max(clusters$y))))
+            ceiling(max(clusters$y))))
 rep1 = list(trans_info = trans_info)
 perm_res_lst = compute_permp(data=rep1,
-                    cluster_info=clusters,
-                    perm.size=100,
-                    bin_type="square",
-                    bin_param=c(2,2),
-                    all_genes=unique(trans_info$feature_name),
-                    correlation_method = "pearson",
-                    n.cores=2,
-                    correction_method="BH",
-                    w_x=w_x ,
-                    w_y=w_y)
+                            cluster_info=clusters,
+                            perm.size=100,
+                            bin_type="square",
+                            bin_param=c(2,2),
+                            all_genes=unique(trans_info$feature_name),
+                            correlation_method = "pearson",
+                            n.cores=2,
+                            correction_method="BH",
+                            w_x=w_x ,
+                            w_y=w_y)
 perm_pvalue = perm_res_lst$perm.pval.adj
 }

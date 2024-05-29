@@ -7,16 +7,16 @@
 create_genesets(
     data_lst,
     name_lst,
+    bin_param,
     bin_type = "square",
-    bin_param = c(40, 40),
     w_x = w_x,
     w_y = w_y,
     cluster_info
 )
 }
 \arguments{
-\item{data_lst}{A list of named matrices containing the coordiantes of 
-transcripts. This can be the output from the function \code{\link{get_data}}.}
+\item{data_lst}{A list of named matrices containing the coordinates of 
+transcripts.}
 
 \item{name_lst}{A named list of strings giving the name of features that are
 treated as background.}

@@ -1,12 +1,11 @@
 
-#' Create spatial vectors for genes from transcript coordiantes
+#' Create spatial vectors for genes from transcript coordinates
 #'
 #' @description
-#' This function will build gene vectors based on the transcript coordiantes of
+#' This function will build gene vectors based on the transcript coordinates of
 #' every gene
 #' @param data_lst A list of list. Every nested list refers to one sample,
 #' which must contain at least one matrix with transcript coordinates.
-#' This can be the output from the function \code{\link{get_data}}.
 #' Optional parameter.
 #' @param all_genes A vector of strings giving the name of the genes you want to
 #' test. This will be used as column names for one of the result matrix
@@ -328,7 +327,6 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #'
 #' @param data_lst A list of list. Every nested list refers to one sample,
 #' which must contain at least one matrix with transcript coordinates.
-#' This can be the output from the function \code{\link{get_data}}.
 #' Optional parameter.
 #' @param cluster_info A dataframe/matrix containing the centroid coordinates,
 #' cluster label and sample for each cell.The column names must include
@@ -419,7 +417,6 @@ check_binning<- function(bin_param, bin_type, w_x, w_y){
 #'                         all_genes = row.names(cm),
 #'                         w_x = c(0,25), w_y=c(0,25))
 #'
-#' @seealso \code{\link{get_data}}
 #'
 #'
 get_vectors<- function(data_lst, cluster_info,cm_lst=NULL, bin_type, bin_param,

@@ -5,11 +5,11 @@
 \alias{rep2_neg}
 \title{Rep2 negative control genes within the selected region.}
 \format{
-A list of named matrices generated from get_data():
+A list of named matrices:
 \describe{
     \item{cm}{the count matrix for negative control genes}
-    \item{trans_info}{a data frame containing the coordiantes for 
-                     every transcript}
+    \item{trans_info}{a data frame containing the coordinates for 
+                        every transcript}
     \item{probe}{names of negative control probe genes}
     \item{codeword}{names of negative control codeword genes}
 }
@@ -26,6 +26,6 @@ data(rep2_neg)
 List
 }
 \description{
-A list of named matrices generated from get_data()
+A list of named matrices
 }
 \keyword{datasets}

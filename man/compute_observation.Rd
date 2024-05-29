@@ -16,8 +16,7 @@ compute_observation(
 )
 }
 \arguments{
-\item{data}{A list of matrices containing the coordinates of transcripts.
-This can be the output from the function \code{\link{get_data}}.}
+\item{data}{A list of matrices containing the coordinates of transcripts.}
 
 \item{cluster_info}{A dataframe/matrix containing the centroid
 coordinates and cluster label for each cell.The column names should
