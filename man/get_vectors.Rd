@@ -111,11 +111,11 @@ clusters = data.frame(x = c(3, 5,11,21,2,23,19),
 clusters$sample="rep1"
 data=list(trans_info=trans)
 vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
-                            cluster_info = clusters,
-                            bin_type = "square",
-                            bin_param = c(2,2),
-                            all_genes = c("A","B","C"),
-                            w_x = c(0,25), w_y=c(0,25))
+                                cluster_info = clusters,
+                                bin_type = "square",
+                                bin_param = c(2,2),
+                                all_genes = c("A","B","C"),
+                                w_x = c(0,25), w_y=c(0,25))
 
 
 # generate gene vector from count matrix
@@ -135,4 +135,7 @@ vecs_lst = get_vectors(data_lst= NULL, cluster_info = clusters,
                         bin_param = c(2,2),
                         all_genes = row.names(cm),
                         w_x = c(0,25), w_y=c(0,25))
+
+
+
 }

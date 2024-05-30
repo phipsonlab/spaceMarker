@@ -86,14 +86,14 @@ permuted correlations larger than the observation correlation.
 \examples{
 
 set.seed(100)
-# simulate coordiantes for clusters
+# simulate coordinates for clusters
 df_clA = data.frame(x = rnorm(n=100, mean=20, sd=5),
-                   y = rnorm(n=100, mean=20, sd=5), cluster="A")
+                    y = rnorm(n=100, mean=20, sd=5), cluster="A")
 df_clB = data.frame(x = rnorm(n=100, mean=100, sd=5),
-                  y = rnorm(n=100, mean=100, sd=5), cluster="B")
+                    y = rnorm(n=100, mean=100, sd=5), cluster="B")
 clusters = rbind(df_clA, df_clB)
 clusters$sample="rep1"
-# simulate coordiantes for genes
+# simulate coordinates for genes
 trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20, sd=5),
                                     y = rnorm(n=100, mean=20, sd=5),
                                     feature_name="gene_A1"),
@@ -114,7 +114,7 @@ w_x =  c(min(floor(min(trans_info$x)),
             ceiling(max(clusters$x))))
 w_y =  c(min(floor(min(trans_info$y)),
             floor(min(clusters$y))),
-      max(ceiling(max(trans_info$y)),
+        max(ceiling(max(trans_info$y)),
             ceiling(max(clusters$y))))
 rep1 = list(trans_info = trans_info)
 perm_res_lst = compute_permp(data=rep1,

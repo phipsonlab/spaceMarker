@@ -180,14 +180,15 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #' Clusters with non-zero coefficient will be selected, and these clusters will
 #' be used to formulate a generalised linear model for this gene vector.
 #'
-#' \itemize{\item{If the input \code{keep_positive} is TRUE, }{the clusters
+#' \itemize{
+#' \item{If the input \code{keep_positive} is TRUE, the clusters
 #' with positive coefficient and significant p-value will be saved in the
 #' output matrix \code{lasso_full_result}. The cluster with a
 #' positive coefficient and the minimum p-value will be regarded as the most
 #' relevant cluster to this gene and be saved in the output matrix
 #' \code{lasso_result}.}
 #'
-#' \item{If the input \code{keep_positive} is FALSE, }{the clusters with
+#' \item{If the input \code{keep_positive} is FALSE, the clusters with
 #' negative coefficient and significant p-value will be saved in the
 #' output matrix \code{lasso_full_result}. The cluster with a negative
 #' coefficient and the minimum p-value will be regarded as the most relevant
@@ -231,16 +232,17 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #' @return a list of two matrices with the following components
 #' \item{\code{lasso_top_result}  }{A matrix with detailed information for
 #' each gene and the most relevant cluster label.
-#' \itemize{\item{\code{gene}}{ Gene name}
-#' \item{\code{top_cluster}} {The name of the most revelant cluster
+#' \itemize{
+#' \item{\code{gene} Gene name}
+#' \item{\code{top_cluster} The name of the most revelant cluster
 #' after thresholding the coefficients. }
-#' \item{\code{glm_coef}}{ The coefficient of the selected cluster in the
+#' \item{\code{glm_coef} The coefficient of the selected cluster in the
 #' generalised linear model.}
-#' \item{\code{pearson}}{ Pearson correlation between the gene vector and the
+#' \item{\code{pearson} Pearson correlation between the gene vector and the
 #' selected cluster vector. }
-#' \item{\code{max_gg_corr}}{ A number showing the maximum pearson correlation
+#' \item{\code{max_gg_corr} A number showing the maximum pearson correlation
 #' for this gene vector and all other gene vectors in the input \code{gene_mt}}
-#' \item{\code{max_gc_corr}}{ A number showing the maximum pearson correlation
+#' \item{\code{max_gc_corr} A number showing the maximum pearson correlation
 #' for this gene vector and every cluster vectors in the input
 #' \code{cluster_mt}}
 #' }
@@ -249,15 +251,16 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #' \item{\code{lasso_full_result}  }{A matrix with detailed information for
 #' each gene and the most relevant cluster label.
 #'
-#' \itemize{\item{\code{gene}}{ Gene name}
-#' \item{\code{cluster}} {The name of the significant cluster after }
-#' \item{\code{glm_coef}}{ The coefficient of the selected cluster
+#' \itemize{
+#' \item{\code{gene} Gene name}
+#' \item{\code{cluster} The name of the significant cluster after }
+#' \item{\code{glm_coef} The coefficient of the selected cluster
 #' in the generalised linear model.}
-#' \item{\code{pearson}}{ Pearson correlation between the gene vector and the
+#' \item{\code{pearson} Pearson correlation between the gene vector and the
 #' selected cluster vector. }
-#' \item{\code{max_gg_corr}}{ A number showing the maximum pearson correlation
+#' \item{\code{max_gg_corr} A number showing the maximum pearson correlation
 #' for this gene vector and all other gene vectors in the input \code{gene_mt}}
-#' \item{\code{max_gc_corr}}{ A number showing the maximum pearson correlation
+#' \item{\code{max_gc_corr} A number showing the maximum pearson correlation
 #' for this gene vector and every cluster vectors in the input
 #' \code{cluster_mt}}
 #' }}
@@ -275,7 +278,7 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #' @examples
 #'
 #' set.seed(100)
-#' #  simulate coordiantes for clusters
+#' #  simulate coordinates for clusters
 #' df_clA = data.frame(x = rnorm(n=100, mean=20, sd=5),
 #'                  y = rnorm(n=100, mean=20, sd=5), cluster="A")
 #' df_clB = data.frame(x = rnorm(n=100, mean=100, sd=5),
@@ -284,7 +287,7 @@ get_lasso_coef <- function(i_gene, gene_mt,vec_cluster,cluster_names,n_fold=10,
 #' clusters = rbind(df_clA, df_clB)
 #' clusters$sample="rep1"
 #'
-#' # simulate coordiantes for genes
+#' # simulate coordinates for genes
 #' trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20,sd=5),
 #'                                 y = rnorm(n=100, mean=20, sd=5),
 #'                                  feature_name="gene_A1"),

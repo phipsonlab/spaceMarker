@@ -215,7 +215,7 @@ compute_permutation<- function(cluster_info, perm.size = 1000,
 #' @examples
 #'
 #' set.seed(100)
-#' # simulate coordiantes for clusters
+#' # simulate coordinates for clusters
 #' df_clA = data.frame(x = rnorm(n=100, mean=20, sd=5),
 #'                    y = rnorm(n=100, mean=20, sd=5), cluster="A")
 #' df_clB = data.frame(x = rnorm(n=100, mean=100, sd=5),
@@ -223,7 +223,7 @@ compute_permutation<- function(cluster_info, perm.size = 1000,
 
 #' clusters = rbind(df_clA, df_clB)
 #' clusters$sample="rep1"
-#' # simulate coordiantes for genes
+#' # simulate coordinates for genes
 #' trans_info = data.frame(rbind(cbind(x = rnorm(n=100, mean=20, sd=5),
 #'                                     y = rnorm(n=100, mean=20, sd=5),
 #'                                  feature_name="gene_A1"),

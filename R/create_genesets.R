@@ -1,6 +1,6 @@
 #' helper function to check the inputs passed to create geneset function
 #' 
-#' @param data_lst A list of named matrices containing the coordiantes of 
+#' @param data_lst A list of named matrices containing the coordinates of 
 #' transcripts.
 #' @param bin_type A string indicating which bin shape is to be used for
 #' vectorization. One of "square" (default), "rectangle", or "hexagon".
@@ -152,7 +152,7 @@ create_genesets<-function(data_lst, name_lst, bin_type="square",
             rpp <- data_lst[[rp_nm]]
             if (use_cm==TRUE){
                 cm_lst <- setNames(list(rpp), rp_nm)
-                # use cell-level coordiantes and count matrix
+                # use cell-level coordinates and count matrix
                 vec_g <- get_gene_vectors_cm(cluster_info=cluster_info,
                                             cm_lst=cm_lst, bin_type=bin_type,
                                             bin_param=bin_param,

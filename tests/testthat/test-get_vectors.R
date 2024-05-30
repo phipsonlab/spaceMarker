@@ -1,6 +1,4 @@
-
-
-# simulate coordiantes for clusters
+# simulate coordinates for clusters
 clusters = data.frame(x = c(1,2,20,21,22,23,24),
                       y = c(23, 24, 1,2,3,4,5), cluster="A")
 clusters$sample="rep1"
@@ -22,7 +20,7 @@ test_that("Test can only vectorise clusters - output vector matches", {
 })
 
 #############################################################################
-# simulate coordiantes for genes
+# simulate coordinates for genes
 trans = data.frame(x = c(1,2,20,21,22,23,24),
                    y = c(23, 24, 1,2,3,4,5),
                    feature_name="A")
@@ -40,7 +38,7 @@ test_that("Test can only vectorise genes - output length mathces", {
 })
 
 #############################################################################
-# simulate coordiantes for genes
+# simulate coordinates for genes
 trans = as.data.frame(rbind(cbind(x = c(1,2,20,21,22,23,24),
                                   y = c(23, 24, 1,2,3,4,5),
                                   feature_name="A"),
@@ -122,12 +120,12 @@ cm <- data.frame(rbind("gene_A"=c(0,0,2,0,0,0,2),
                        "gene_D"=c(0,1,1,2,0,0,2)))
 colnames(cm)= paste("cell_", 1:7, sep="")
 
-# simulate coordiantes for clusters
+# simulate coordinates for clusters
 clusters = data.frame(x = c(1, 2,20,21,22,23,24),
                       y = c(23, 24, 1,2,3,4,5), cluster="A")
 clusters$sample="rep1"
 clusters$cell_id= colnames(cm)
-# simulate coordiantes for genes
+# simulate coordinates for genes
 w_x=c(0,25)
 w_y=c(0,25)
 # cell_1 = (1,0,0,0)
