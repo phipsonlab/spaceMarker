@@ -12,8 +12,9 @@ based on the spatial coordiantes for imaging-based spatial transcriptomics techn
 
 
 ## Installation
+We are currently in the process of submitting spaceMarker to Bioconductor. 
 
-To install spaceMarker from github, use either of the following commands:
+To install spaceMarker from github, use the following commands:
 
 ``` r
 library(devtools)
