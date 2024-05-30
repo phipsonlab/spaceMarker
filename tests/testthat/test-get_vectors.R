@@ -234,7 +234,7 @@ vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
                             bin_type = "square",
                             bin_param = c(2,2),
                             all_genes = c("A","B","C"),
-                            w_x = w_x, w_y=w_y,n_cores = 3)
+                            w_x = w_x, w_y=w_y,n_cores = 2)
 
 
 test_that("Test can vectorise genes and clusters - output mathces", {
@@ -269,7 +269,7 @@ vecs_lst_gene = get_vectors(data_lst= list("rep1"= data),
                             bin_type = "square",
                             bin_param = c(2,2),
                             all_genes = c("A","B","C"),
-                            w_x = w_x, w_y=w_y,n_cores = 3 )
+                            w_x = w_x, w_y=w_y,n_cores = 2 )
 
 
 test_that("Test can vectorise genes and clusters - output mathces", {
@@ -317,7 +317,7 @@ vector_lst_5core = get_vectors(data_lst= list(sample1 =list(trans_info=coords_da
                                bin_type="square",
                                bin_param=c(50,50),
                                all_genes = feature_names,
-                               w_x=c(0,10000), w_y=c(0,10000), n_cores = 5)
+                               w_x=c(0,10000), w_y=c(0,10000), n_cores = 2)
 test_that("Test can result from sequential matches with result from parallel", {
     expect_equal(as.vector(vector_lst_1core$gene_mt), 
                  as.vector(vector_lst_5core$gene_mt))
